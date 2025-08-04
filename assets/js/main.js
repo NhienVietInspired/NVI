@@ -142,6 +142,349 @@ serviceCards.forEach(card => {
     });
 });
 
+// Image slider functionality for service cards
+document.addEventListener('DOMContentLoaded', function() {
+    // Create fullscreen overlay if it doesn't exist
+    if (!document.querySelector('.fullscreen-overlay')) {
+        const fullscreenOverlay = document.createElement('div');
+        fullscreenOverlay.className = 'fullscreen-overlay';
+        fullscreenOverlay.innerHTML = `
+            <button class="close-fullscreen" id="closeFullscreenBtn">
+                <span class="close-icon">×</span>
+            </button>
+            <div class="fullscreen-container">
+                <div class="fullscreen-navigation">
+                    <button class="fullscreen-prev"><i class="fas fa-chevron-left"></i></button>
+                    <div class="fullscreen-indicators"></div>
+                    <button class="fullscreen-next"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(fullscreenOverlay);
+
+        // Close fullscreen when clicking on overlay background
+        fullscreenOverlay.addEventListener('click', function(e) {
+            if (e.target === fullscreenOverlay) {
+                fullscreenOverlay.classList.remove('active');
+            }
+        });
+        
+        // Thiết lập sự kiện click trực tiếp cho nút đóng
+        function setupCloseButtonEvents() {
+            // Nút đóng
+            const closeButton = document.getElementById('closeFullscreenBtn');
+            if (closeButton) {
+                // Xóa tất cả sự kiện click cũ (nếu có)
+                const newCloseButton = closeButton.cloneNode(true);
+                closeButton.parentNode.replaceChild(newCloseButton, closeButton);
+                
+                // Thêm sự kiện click mới
+                newCloseButton.onclick = function(e) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    document.querySelector('.fullscreen-overlay').classList.remove('active');
+                    return false;
+                };
+            }
+            
+            // Biểu tượng X
+            const closeIcon = document.querySelector('.close-icon');
+            if (closeIcon) {
+                // Xóa tất cả sự kiện click cũ (nếu có)
+                const newCloseIcon = closeIcon.cloneNode(true);
+                closeIcon.parentNode.replaceChild(newCloseIcon, closeIcon);
+                
+                // Thêm sự kiện click mới
+                newCloseIcon.onclick = function(e) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    document.querySelector('.fullscreen-overlay').classList.remove('active');
+                    return false;
+                };
+            }
+        }
+        
+        // Thiết lập sự kiện ngay sau khi tạo overlay
+        setupCloseButtonEvents();
+        
+        // Thêm sự kiện click trực tiếp cho nút đóng
+        document.addEventListener('click', function(e) {
+            const closeButton = e.target.closest('#closeFullscreenBtn');
+            const closeIcon = e.target.closest('.close-icon');
+            
+            if (closeButton || closeIcon) {
+                e.stopPropagation();
+                e.preventDefault();
+                const overlay = document.querySelector('.fullscreen-overlay');
+                if (overlay) {
+                    overlay.classList.remove('active');
+                }
+                return false;
+            }
+        }, true); // Sử dụng capturing phase để đảm bảo sự kiện được xử lý trước
+
+        // Xử lý sự kiện click cho nút đóng và biểu tượng X
+        function setupCloseButtonEvents() {
+            // Nút đóng
+            const closeButton = document.getElementById('closeFullscreenBtn');
+            if (closeButton) {
+                // Xóa tất cả sự kiện click cũ (nếu có)
+                const newCloseButton = closeButton.cloneNode(true);
+                closeButton.parentNode.replaceChild(newCloseButton, closeButton);
+                
+                // Thêm sự kiện click mới
+                newCloseButton.onclick = function(e) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    document.querySelector('.fullscreen-overlay').classList.remove('active');
+                    return false;
+                };
+            }
+            
+            // Biểu tượng X
+            const closeIcon = document.querySelector('.close-icon');
+            if (closeIcon) {
+                // Xóa tất cả sự kiện click cũ (nếu có)
+                const newCloseIcon = closeIcon.cloneNode(true);
+                closeIcon.parentNode.replaceChild(newCloseIcon, closeIcon);
+                
+                // Thêm sự kiện click mới
+                newCloseIcon.onclick = function(e) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    document.querySelector('.fullscreen-overlay').classList.remove('active');
+                    return false;
+                };
+            }
+        }
+        
+        // Thiết lập sự kiện ngay sau khi tạo overlay
+        setupCloseButtonEvents();
+    }
+
+    // Setup image sliders for each service card
+    const imageContainers = document.querySelectorAll('.service-image-container');
+    
+    imageContainers.forEach(container => {
+        const images = container.querySelectorAll('.service-image');
+        const prevBtn = container.querySelector('.prev-image');
+        const nextBtn = container.querySelector('.next-image');
+        const indicators = container.querySelectorAll('.indicator');
+        const fullscreenBtn = container.querySelector('.toggle-fullscreen');
+        let currentIndex = 0;
+        
+        // Thêm xử lý sự kiện vuốt (swipe) cho thiết bị di động
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        // Xử lý sự kiện chạm bắt đầu
+        container.addEventListener('touchstart', function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+            // Ngăn chặn hành vi cuộn trang khi đang tương tác với slider
+            e.preventDefault();
+        }, { passive: false });
+        
+        // Xử lý sự kiện chạm kết thúc
+        container.addEventListener('touchend', function(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            
+            // Thêm hiệu ứng phản hồi khi vuốt
+            const difference = touchStartX - touchEndX;
+            if (Math.abs(difference) > 50) {
+                container.style.transition = 'transform 0.3s ease';
+                container.style.transform = difference > 0 ? 'translateX(-10px)' : 'translateX(10px)';
+                
+                setTimeout(() => {
+                    container.style.transform = 'translateX(0)';
+                    handleSwipe();
+                    
+                    // Xóa hiệu ứng sau khi hoàn thành
+                    setTimeout(() => {
+                        container.style.transition = '';
+                        container.style.transform = '';
+                    }, 300);
+                }, 150);
+            } else {
+                handleSwipe();
+            }
+        }, false);
+        
+        // Xử lý hành động vuốt
+        function handleSwipe() {
+            // Vuốt sang phải (previous)
+            if (touchEndX > touchStartX + 50) {
+                let index = currentIndex - 1;
+                if (index < 0) index = images.length - 1;
+                showImage(index);
+            }
+            
+            // Vuốt sang trái (next)
+            if (touchStartX > touchEndX + 50) {
+                let index = currentIndex + 1;
+                if (index >= images.length) index = 0;
+                showImage(index);
+            }
+        }
+
+        // Function to show image at specific index
+        function showImage(index) {
+            // Hide all images
+            images.forEach(img => img.classList.remove('active'));
+            // Show selected image
+            images[index].classList.add('active');
+            // Update indicators
+            indicators.forEach(ind => ind.classList.remove('active'));
+            indicators[index].classList.add('active');
+            currentIndex = index;
+        }
+
+        // Previous button click
+        prevBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            let index = currentIndex - 1;
+            if (index < 0) index = images.length - 1;
+            showImage(index);
+        });
+
+        // Next button click
+        nextBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            let index = currentIndex + 1;
+            if (index >= images.length) index = 0;
+            showImage(index);
+        });
+
+        // Indicator clicks
+        indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', function(e) {
+                e.stopPropagation();
+                showImage(index);
+            });
+        });
+
+        // Fullscreen toggle
+        fullscreenBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const fullscreenOverlay = document.querySelector('.fullscreen-overlay');
+            const fullscreenContainer = fullscreenOverlay.querySelector('.fullscreen-container');
+            const fullscreenIndicators = fullscreenOverlay.querySelector('.fullscreen-indicators');
+            
+            // Clear previous fullscreen images
+            fullscreenContainer.querySelectorAll('.fullscreen-image').forEach(img => img.remove());
+            fullscreenIndicators.innerHTML = '';
+            
+            // Create fullscreen images
+            images.forEach((img, index) => {
+                const fullscreenImage = document.createElement('div');
+                fullscreenImage.className = 'fullscreen-image';
+                fullscreenImage.style.backgroundImage = img.style.backgroundImage;
+                if (index === currentIndex) fullscreenImage.classList.add('active');
+                fullscreenContainer.appendChild(fullscreenImage);
+                
+                // Create indicator
+                const indicator = document.createElement('span');
+                indicator.className = 'fullscreen-indicator';
+                if (index === currentIndex) indicator.classList.add('active');
+                fullscreenIndicators.appendChild(indicator);
+                
+                // Indicator click
+                indicator.addEventListener('click', function() {
+                    showFullscreenImage(index);
+                });
+            });
+            
+            // Show fullscreen overlay
+            fullscreenOverlay.classList.add('active');
+            
+            // Đảm bảo sự kiện nút đóng được thiết lập sau khi hiển thị overlay
+            setupCloseButtonEvents();
+            
+            // Đảm bảo sự kiện nút đóng được thiết lập sau khi hiển thị overlay
+            setupCloseButtonEvents();
+            
+            // Setup fullscreen navigation
+            const fullscreenImages = fullscreenContainer.querySelectorAll('.fullscreen-image');
+            const fullscreenIndicatorsArray = fullscreenIndicators.querySelectorAll('.fullscreen-indicator');
+            let fullscreenCurrentIndex = currentIndex;
+            
+            function showFullscreenImage(index) {
+                fullscreenImages.forEach(img => img.classList.remove('active'));
+                fullscreenImages[index].classList.add('active');
+                fullscreenIndicatorsArray.forEach(ind => ind.classList.remove('active'));
+                fullscreenIndicatorsArray[index].classList.add('active');
+                fullscreenCurrentIndex = index;
+            }
+            
+            // Fullscreen previous button
+            fullscreenOverlay.querySelector('.fullscreen-prev').addEventListener('click', function() {
+                let index = fullscreenCurrentIndex - 1;
+                if (index < 0) index = fullscreenImages.length - 1;
+                showFullscreenImage(index);
+            });
+            
+            // Fullscreen next button
+            fullscreenOverlay.querySelector('.fullscreen-next').addEventListener('click', function() {
+                let index = fullscreenCurrentIndex + 1;
+                if (index >= fullscreenImages.length) index = 0;
+                showFullscreenImage(index);
+            });
+            
+            // Thêm xử lý sự kiện vuốt (swipe) cho chế độ xem toàn màn hình trên thiết bị di động
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            // Xử lý sự kiện chạm bắt đầu
+            fullscreenContainer.addEventListener('touchstart', function(e) {
+                touchStartX = e.changedTouches[0].screenX;
+                // Ngăn chặn hành vi cuộn trang khi đang tương tác với slider toàn màn hình
+                e.preventDefault();
+            }, { passive: false });
+            
+            // Xử lý sự kiện chạm kết thúc
+            fullscreenContainer.addEventListener('touchend', function(e) {
+                touchEndX = e.changedTouches[0].screenX;
+                
+                // Thêm hiệu ứng phản hồi khi vuốt
+                const difference = touchStartX - touchEndX;
+                if (Math.abs(difference) > 50) {
+                    fullscreenContainer.style.transition = 'transform 0.3s ease';
+                    fullscreenContainer.style.transform = difference > 0 ? 'translateX(-20px)' : 'translateX(20px)';
+                    
+                    setTimeout(() => {
+                        fullscreenContainer.style.transform = 'translateX(0)';
+                        handleFullscreenSwipe();
+                        
+                        // Xóa hiệu ứng sau khi hoàn thành
+                        setTimeout(() => {
+                            fullscreenContainer.style.transition = '';
+                            fullscreenContainer.style.transform = '';
+                        }, 300);
+                    }, 150);
+                } else {
+                    handleFullscreenSwipe();
+                }
+            }, false);
+            
+            // Xử lý hành động vuốt trong chế độ toàn màn hình
+            function handleFullscreenSwipe() {
+                // Vuốt sang phải (previous)
+                if (touchEndX > touchStartX + 50) {
+                    let index = fullscreenCurrentIndex - 1;
+                    if (index < 0) index = fullscreenImages.length - 1;
+                    showFullscreenImage(index);
+                }
+                
+                // Vuốt sang trái (next)
+                if (touchStartX > touchEndX + 50) {
+                    let index = fullscreenCurrentIndex + 1;
+                    if (index >= fullscreenImages.length) index = 0;
+                    showFullscreenImage(index);
+                }
+            }
+        });
+    });
+});
+
 // Counter animation for statistics
 function animateCounter(element, target, duration = 2000) {
     let start = 0;
@@ -523,6 +866,25 @@ class PerformanceOptimizer {
 // Initialize Performance Optimizer
 const performanceOptimizer = new PerformanceOptimizer();
 
+// Hiển thị thông báo hướng dẫn vuốt cho người dùng thiết bị di động
+function showSwipeInstructions() {
+    // Kiểm tra xem có phải là thiết bị di động không
+    if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+        // Kiểm tra xem đã hiển thị hướng dẫn trước đó chưa
+        if (!localStorage.getItem('swipeInstructionsShown')) {
+            // Tạo thông báo hướng dẫn
+            setTimeout(() => {
+                toast.show('Vuốt sang trái/phải để chuyển ảnh', 'info', 5000);
+                // Lưu trạng thái đã hiển thị hướng dẫn
+                localStorage.setItem('swipeInstructionsShown', 'true');
+            }, 2000);
+        }
+    }
+}
+
+// Gọi hàm hiển thị hướng dẫn khi trang được tải
+document.addEventListener('DOMContentLoaded', showSwipeInstructions);
+
 // Enhanced Mobile Menu
 class MobileMenu {
     constructor() {
@@ -628,4 +990,4 @@ style.textContent = `
         animation: fadeIn 0.5s ease;
     }
 `;
-document.head.appendChild(style); 
+document.head.appendChild(style);

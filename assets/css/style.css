@@ -427,10 +427,255 @@ p {
     box-shadow: var(--shadow-lg);
 }
 
-.service-image {
+.service-image-container {
+    position: relative;
     height: 200px;
+    overflow: hidden;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.service-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background-size: cover;
     background-position: center;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    z-index: 1;
+}
+
+.service-image.active {
+    opacity: 1;
+    z-index: 2;
+}
+
+.image-navigation {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+    z-index: 3;
+}
+
+.prev-image, .next-image, .fullscreen-prev, .fullscreen-next {
+    background-color: rgba(255, 255, 255, 0.7);
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.prev-image:hover, .next-image:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.prev-image:active, .next-image:active {
+    transform: scale(0.9);
+    background-color: rgba(255, 255, 255, 1);
+}
+
+.image-indicators {
+    display: flex;
+    gap: 5px;
+}
+
+.indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.5);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.indicator.active {
+    background-color: var(--accent-gold);
+}
+
+.indicator:active {
+    transform: scale(0.8);
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.toggle-fullscreen {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(255, 255, 255, 0.7);
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    z-index: 3;
+}
+
+.toggle-fullscreen:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.toggle-fullscreen:active {
+    transform: scale(0.9);
+    background-color: rgba(255, 255, 255, 1);
+}
+
+/* Fullscreen mode */
+.fullscreen-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.fullscreen-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.fullscreen-container {
+    position: relative;
+    width: 90%;
+    height: 80%;
+    max-width: 1200px;
+}
+
+.fullscreen-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.fullscreen-image.active {
+    opacity: 1;
+}
+
+.fullscreen-navigation {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.fullscreen-prev, .fullscreen-next {
+    background-color: rgba(255, 255, 255, 0.7);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.fullscreen-prev:hover, .fullscreen-next:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.fullscreen-prev:active, .fullscreen-next:active {
+    transform: scale(0.9);
+    background-color: rgba(255, 255, 255, 1);
+}
+
+.fullscreen-indicators {
+    display: flex;
+    gap: 10px;
+}
+
+.fullscreen-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.5);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.fullscreen-indicator.active {
+    background-color: var(--accent-gold);
+}
+
+.fullscreen-indicator:active {
+    transform: scale(0.8);
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.close-fullscreen {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 3px solid #333;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease, transform 0.2s ease;
+    z-index: 10001; /* Đảm bảo nút đóng luôn ở trên cùng */
+    padding: 0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.close-fullscreen:hover {
+    background-color: #fff;
+    transform: scale(1.1);
+}
+
+.close-fullscreen:active {
+    transform: scale(0.9);
+    background-color: #eee;
+}
+
+.close-icon {
+    font-size: 40px;
+    color: #333;
+    line-height: 0.8;
+    font-weight: bold;
+    pointer-events: auto; /* Đảm bảo sự kiện click được xử lý */
+    transition: transform 0.2s ease;
+}
+
+.close-icon:active {
+    transform: rotate(90deg);
 }
 
 .service-content {
@@ -746,6 +991,49 @@ p {
 
     .container {
         padding: 0 1rem;
+    }
+    
+    /* Cải thiện trải nghiệm người dùng trên thiết bị di động */
+    .prev-image, .next-image, .fullscreen-prev, .fullscreen-next {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .toggle-fullscreen {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .close-fullscreen {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .close-icon {
+        font-size: 36px;
+    }
+    
+    /* Tăng kích thước vùng chạm cho các nút điều hướng */
+    .image-navigation button, .fullscreen-navigation button {
+        padding: 15px;
+        margin: 0 5px;
+        transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+    
+    .image-navigation button:active, .fullscreen-navigation button:active {
+        transform: scale(0.9);
+        opacity: 0.8;
+    }
+    
+    .indicator, .fullscreen-indicator {
+        width: 15px;
+        height: 15px;
+        margin: 0 5px;
+        transition: transform 0.2s ease;
+    }
+    
+    .indicator:active, .fullscreen-indicator:active {
+        transform: scale(0.9);
     }
 }
 
@@ -1159,4 +1447,4 @@ p {
     }
 
     
-} 
+}
