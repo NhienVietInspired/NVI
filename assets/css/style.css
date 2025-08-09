@@ -2029,7 +2029,7 @@ p {
         width: 100%;
         background: var(--primary-green);
         flex-direction: column;
-        padding: 1rem 0;
+        padding: 1.5rem 0;
         z-index: 1000;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         transition: all 0.3s ease;
@@ -2037,6 +2037,24 @@ p {
 
     .nav-menu.active {
         display: flex;
+    }
+    
+    .nav-menu li {
+        margin: 0.8rem 0;
+    }
+    
+    .nav-menu a {
+        padding: 1rem 2rem;
+        display: block;
+        font-size: 1.1rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+    
+    .nav-menu a:hover {
+        background-color: rgba(255, 255, 255, 0.15);
+        color: var(--accent-gold);
+        transform: translateX(5px);
     }
 
     .mobile-menu-btn {
