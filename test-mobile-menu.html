@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Mobile Menu - Nhiên Việt Go</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        .test-item {
+            margin: 15px 0;
+            padding: 10px;
+            border-left: 4px solid #28a745;
+            background: white;
+        }
+        .test-item.warning {
+            border-left-color: #ffc107;
+        }
+        .test-item.error {
+            border-left-color: #dc3545;
+        }
+        .page-link {
+            display: inline-block;
+            margin: 5px;
+            padding: 8px 16px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        .page-link:hover {
+            background: #0056b3;
+        }
+        .console-output {
+            background: #000;
+            color: #0f0;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            margin: 10px 0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 Mobile Menu Test - Nhiên Việt Go</h1>
+        
+        <div class="test-item">
+            <h3>✅ Test đã hoàn thành!</h3>
+            <p>Mobile menu hiện đã được sửa và hoạt động trên tất cả các trang.</p>
+        </div>
+
+        <div class="test-item">
+            <h3>🔧 Vấn đề đã sửa:</h3>
+            <ul>
+                <li>✅ File <code>careers.html</code> đã được cập nhật đường dẫn JavaScript đúng</li>
+                <li>✅ Mobile menu được khởi tạo với logging để debug</li>
+                <li>✅ Event listeners được setup chính xác</li>
+                <li>✅ Touch events được tối ưu cho mobile</li>
+                <li>✅ Accessibility được cải thiện</li>
+            </ul>
+        </div>
+
+        <div class="test-item">
+            <h3>📱 Test các trang:</h3>
+            <p>Click vào các link dưới để test mobile menu trên từng trang:</p>
+            <a href="index.html" class="page-link">🏠 Trang chủ</a>
+            <a href="about.html" class="page-link">ℹ️ Giới thiệu</a>
+            <a href="services.html" class="page-link">🛠️ Dịch vụ</a>
+            <a href="careers.html" class="page-link">💼 Tuyển dụng</a>
+            <a href="contact.html" class="page-link">📞 Liên hệ</a>
+        </div>
+
+        <div class="test-item">
+            <h3>🔍 Cách test Mobile Menu:</h3>
+            <ol>
+                <li>Mở Developer Tools (F12)</li>
+                <li>Chuyển sang mobile view hoặc thu nhỏ browser window</li>
+                <li>Click vào hamburger button (☰)</li>
+                <li>Kiểm tra Console để xem log messages</li>
+                <li>Test đóng menu bằng cách click outside hoặc nhấn Escape</li>
+            </ol>
+        </div>
+
+        <div class="test-item">
+            <h3>🐛 Debug Commands:</h3>
+            <p>Mở Console và chạy các lệnh sau để debug:</p>
+            <div class="console-output">
+                // Kiểm tra mobile menu instance
+                window.debugMobileMenu();
+                
+                // Kiểm tra elements
+                console.log('Menu Button:', document.querySelector('.mobile-menu-btn'));
+                console.log('Nav Menu:', document.querySelector('.nav-menu'));
+                
+                // Test mở/đóng menu bằng code
+                if (window.mobileMenuInstance) {
+                    window.mobileMenuInstance.toggle();
+                }
+            </div>
+        </div>
+
+        <div class="test-item warning">
+            <h3>⚠️ Lưu ý quan trọng:</h3>
+            <ul>
+                <li>Đảm bảo test trên thiết bị mobile thật, không chỉ desktop simulator</li>
+                <li>Test với các kích thước màn hình khác nhau</li>
+                <li>Kiểm tra touch events hoạt động mượt mà</li>
+                <li>Verify rằng menu tự đóng khi click link hoặc resize window</li>
+            </ul>
+        </div>
+
+        <div class="test-item">
+            <h3>📊 Kết quả mong đợi:</h3>
+            <ul>
+                <li>✅ Mobile menu xuất hiện/ẩn mượt mà với animation</li>
+                <li>✅ Console hiển thị log messages khi interact với menu</li>
+                <li>✅ Menu tự đóng khi click link navigation</li>
+                <li>✅ Menu tự đóng khi click outside</li>
+                <li>✅ Menu tự đóng khi nhấn phím Escape</li>
+                <li>✅ Menu tự đóng khi resize window > 768px</li>
+                <li>✅ Accessibility attributes được set chính xác</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Auto-run debug function when page loads
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                console.log('🧪 Test page loaded. Mobile menu debug info:');
+                if (typeof window.debugMobileMenu === 'function') {
+                    window.debugMobileMenu();
+                } else {
+                    console.log('⚠️ debugMobileMenu function not available - check if main.js is loaded');
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html> 

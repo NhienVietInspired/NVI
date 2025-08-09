@@ -1,42 +1,211 @@
-// Mobile Menu functionality is handled by the Enhanced MobileMenu class below
+// Enhanced and Unified Mobile Menu functionality for all pages
+// This replaces all previous mobile menu implementations
+
+// Ensure DOM is fully loaded before initializing
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeWebsite);
+} else {
+    initializeWebsite();
+}
+
+function initializeWebsite() {
+    console.log('🚀 Initializing Nhiên Việt Go website...');
+    
+    // Initialize all components
+    initializeMobileMenu();
+    initializeSmoothScrolling();
+    initializeScrollToTop();
+    initializeAnimations();
+    initializeContactForms();
+    initializeImageGallery();
+    initializePerformanceOptimizations();
+    initializeToastSystem();
+    initializeEmailForms();
+    showSwipeInstructions();
+    
+    console.log('✅ Website initialization complete!');
+}
+
+// Enhanced Mobile Menu Class - Works on ALL pages
+function initializeMobileMenu() {
+    const menuBtn = document.querySelector('.mobile-menu-btn');
+    const navMenu = document.querySelector('.nav-menu');
+    
+    if (!menuBtn || !navMenu) {
+        console.warn('Mobile menu elements not found on this page');
+        return;
+    }
+    
+    console.log('📱 Initializing mobile menu...');
+    
+    const mobileMenu = new UnifiedMobileMenu(menuBtn, navMenu);
+    
+    // Make it globally accessible for debugging
+    window.mobileMenuInstance = mobileMenu;
+    
+    console.log('✅ Mobile menu initialized successfully');
+}
+
+class UnifiedMobileMenu {
+    constructor(menuBtn, navMenu) {
+        this.menuBtn = menuBtn;
+        this.navMenu = navMenu;
+        this.isMenuOpen = false;
+        this.init();
+    }
+
+    init() {
+        // Remove any existing event listeners by cloning elements
+        this.setupEventListeners();
+        this.setupAccessibility();
+        
+        console.log('🔧 Mobile menu event listeners attached');
+    }
+    
+    setupEventListeners() {
+        // Mobile menu button click
+        this.menuBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('📱 Menu button clicked');
+            this.toggle();
+        });
+
+        // Close menu when clicking nav links
+        const navLinks = this.navMenu.querySelectorAll('a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                console.log('🔗 Nav link clicked, closing menu');
+                this.close();
+            });
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (this.isMenuOpen && 
+                !this.menuBtn.contains(e.target) && 
+                !this.navMenu.contains(e.target)) {
+                console.log('🔍 Clicked outside, closing menu');
+                this.close();
+            }
+        });
+
+        // Close menu on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.isMenuOpen) {
+                console.log('⌨️ Escape pressed, closing menu');
+                this.close();
+            }
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768 && this.isMenuOpen) {
+                console.log('📏 Window resized, closing menu');
+                this.close();
+            }
+        });
+    }
+    
+    setupAccessibility() {
+        // Add ARIA attributes
+        this.menuBtn.setAttribute('aria-label', 'Mở menu điều hướng');
+        this.menuBtn.setAttribute('aria-expanded', 'false');
+        this.menuBtn.setAttribute('aria-controls', 'nav-menu');
+        
+        this.navMenu.setAttribute('id', 'nav-menu');
+        this.navMenu.setAttribute('aria-hidden', 'true');
+    }
+
+    toggle() {
+        console.log(`🔄 Toggling menu. Current state: ${this.isMenuOpen ? 'open' : 'closed'}`);
+        if (this.isMenuOpen) {
+            this.close();
+        } else {
+            this.open();
+        }
+    }
+
+    open() {
+        console.log('📂 Opening mobile menu');
+        this.navMenu.classList.add('active');
+        this.menuBtn.classList.add('active');
+        this.isMenuOpen = true;
+        
+        // Prevent body scroll when menu is open
+        document.body.style.overflow = 'hidden';
+        
+        // Animate menu items
+        const menuItems = this.navMenu.querySelectorAll('li');
+        menuItems.forEach((item, index) => {
+            item.style.animation = `slideInRight 0.3s ease ${index * 0.1}s both`;
+        });
+
+        // Update ARIA attributes for accessibility
+        this.menuBtn.setAttribute('aria-expanded', 'true');
+        this.navMenu.setAttribute('aria-hidden', 'false');
+        
+        console.log('✅ Mobile menu opened');
+    }
+
+    close() {
+        console.log('📁 Closing mobile menu');
+        this.navMenu.classList.remove('active');
+        this.menuBtn.classList.remove('active');
+        this.isMenuOpen = false;
+        
+        // Restore body scroll
+        document.body.style.overflow = '';
+        
+        // Clear animations
+        const menuItems = this.navMenu.querySelectorAll('li');
+        menuItems.forEach(item => {
+            item.style.animation = '';
+        });
+
+        // Update ARIA attributes for accessibility
+        this.menuBtn.setAttribute('aria-expanded', 'false');
+        this.navMenu.setAttribute('aria-hidden', 'true');
+        
+        console.log('✅ Mobile menu closed');
+    }
+}
 
 // Smooth scrolling for anchor links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
+function initializeSmoothScrolling() {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
     });
-});
-
-// Note: Mobile menu closing is now handled by the Enhanced MobileMenu class
+}
 
 // Scroll to top button
-const scrollTopBtn = document.querySelector('.scroll-top');
+function initializeScrollToTop() {
+    const scrollTopBtn = document.querySelector('.scroll-top');
+    
+    if (!scrollTopBtn) return;
 
-window.addEventListener('scroll', () => {
-    if (window.pageYOffset > 300) {
-        scrollTopBtn.classList.add('visible');
-    } else {
-        scrollTopBtn.classList.remove('visible');
-    }
-});
+    window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 300) {
+            scrollTopBtn.classList.add('visible');
+        } else {
+            scrollTopBtn.classList.remove('visible');
+        }
+    });
 
-if (scrollTopBtn) {
     scrollTopBtn.addEventListener('click', () => {
-        // Custom smooth scroll với tốc độ có thể điều chỉnh
         const scrollToTop = () => {
             const currentPosition = window.pageYOffset;
             if (currentPosition > 0) {
-                // Tốc độ cuộn: thay đổi số này để điều chỉnh tốc độ
-                // Số càng nhỏ = cuộn càng nhanh
-                // Số càng lớn = cuộn càng chậm
-                const scrollStep = Math.max(currentPosition / 22, 1); // Điều chỉnh 20 thành số khác
+                const scrollStep = Math.max(currentPosition / 22, 1);
                 window.scrollTo(0, currentPosition - scrollStep);
                 requestAnimationFrame(scrollToTop);
             }
@@ -46,61 +215,62 @@ if (scrollTopBtn) {
 }
 
 // Intersection Observer for animations
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-};
+function initializeAnimations() {
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
 
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('fade-in-up');
-        }
-    });
-}, observerOptions);
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('fade-in-up');
+            }
+        });
+    }, observerOptions);
 
-// Observe elements for animation
-document.addEventListener('DOMContentLoaded', () => {
-    const animatedElements = document.querySelectorAll('.about-card, .service-card, .value-card, .contact-item');
+    const animatedElements = document.querySelectorAll('.about-card, .service-card, .value-card, .contact-item, .benefit-card, .job-card, .testimonial-card');
     animatedElements.forEach(el => {
         observer.observe(el);
     });
-});
+}
 
 // Form validation and submission
-const contactForm = document.querySelector('.contact-form form');
-if (contactForm) {
-    contactForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Basic form validation
-        const name = this.querySelector('input[name="name"]').value.trim();
-        const email = this.querySelector('input[name="email"]').value.trim();
-        const message = this.querySelector('textarea[name="message"]').value.trim();
-        
-        if (!name || !email || !message) {
-            alert('Vui lòng điền đầy đủ thông tin!');
-            return;
-        }
-        
-        if (!isValidEmail(email)) {
-            alert('Vui lòng nhập email hợp lệ!');
-            return;
-        }
-        
-        // Simulate form submission
-        const submitBtn = this.querySelector('button[type="submit"]');
-        const originalText = submitBtn.textContent;
-        submitBtn.textContent = 'Đang gửi...';
-        submitBtn.disabled = true;
-        
-        setTimeout(() => {
-            alert('Cảm ơn bạn đã liên hệ! Chúng tôi sẽ phản hồi sớm nhất có thể.');
-            this.reset();
-            submitBtn.textContent = originalText;
-            submitBtn.disabled = false;
-        }, 2000);
-    });
+function initializeContactForms() {
+    const contactForm = document.querySelector('.contact-form form');
+    if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Basic form validation
+            const name = this.querySelector('input[name="name"]')?.value.trim();
+            const email = this.querySelector('input[name="email"]')?.value.trim();
+            const message = this.querySelector('textarea[name="message"]')?.value.trim();
+            
+            if (!name || !email || !message) {
+                alert('Vui lòng điền đầy đủ thông tin!');
+                return;
+            }
+            
+            if (!isValidEmail(email)) {
+                alert('Vui lòng nhập email hợp lệ!');
+                return;
+            }
+            
+            // Simulate form submission
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Đang gửi...';
+            submitBtn.disabled = true;
+            
+            setTimeout(() => {
+                alert('Cảm ơn bạn đã liên hệ! Chúng tôi sẽ phản hồi sớm nhất có thể.');
+                this.reset();
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }, 2000);
+        });
+    }
 }
 
 // Email validation function
@@ -110,55 +280,91 @@ function isValidEmail(email) {
 }
 
 // Header background change on scroll
-const header = document.querySelector('.header');
-window.addEventListener('scroll', () => {
-    if (window.pageYOffset > 100) {
-        header.style.background = 'rgba(45, 90, 39, 0.95)';
-    } else {
-        header.style.background = 'linear-gradient(135deg, var(--primary-green), var(--secondary-green))';
-    }
-});
+function initializeHeaderEffects() {
+    const header = document.querySelector('.header');
+    if (!header) return;
+    
+    window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 100) {
+            header.style.background = 'rgba(45, 90, 39, 0.95)';
+        } else {
+            header.style.background = 'linear-gradient(135deg, var(--primary-green), var(--secondary-green))';
+        }
+    });
+}
 
 // Service cards hover effect
-const serviceCards = document.querySelectorAll('.service-card');
-serviceCards.forEach(card => {
-    card.addEventListener('mouseenter', function() {
-        this.style.transform = 'translateY(-10px) scale(1.02)';
+function initializeServiceCards() {
+    const serviceCards = document.querySelectorAll('.service-card');
+    serviceCards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-10px) scale(1.02)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0) scale(1)';
+        });
     });
-    
-    card.addEventListener('mouseleave', function() {
-        this.style.transform = 'translateY(0) scale(1)';
-    });
-});
+}
 
-// Image slider functionality for service cards
-document.addEventListener('DOMContentLoaded', function() {
+// Enhanced Image Gallery with Mobile-Optimized Fullscreen
+function initializeImageGallery() {
     // Create fullscreen overlay if it doesn't exist
     if (!document.querySelector('.fullscreen-overlay')) {
         const fullscreenOverlay = document.createElement('div');
         fullscreenOverlay.className = 'fullscreen-overlay';
         fullscreenOverlay.innerHTML = `
-            <button class="close-fullscreen" id="closeFullscreenBtn">
+            <button class="close-fullscreen" type="button" aria-label="Đóng xem toàn màn hình">
                 <span class="close-icon">×</span>
             </button>
             <div class="fullscreen-container">
                 <div class="fullscreen-navigation">
-                    <button class="fullscreen-prev"><i class="fas fa-chevron-left"></i></button>
+                    <button class="fullscreen-prev" type="button" aria-label="Ảnh trước"><i class="fas fa-chevron-left"></i></button>
                     <div class="fullscreen-indicators"></div>
-                    <button class="fullscreen-next"><i class="fas fa-chevron-right"></i></button>
+                    <button class="fullscreen-next" type="button" aria-label="Ảnh tiếp theo"><i class="fas fa-chevron-right"></i></button>
                 </div>
             </div>
         `;
         document.body.appendChild(fullscreenOverlay);
 
-        // Close fullscreen when clicking on overlay background
+        // Enhanced close functionality for mobile
+        const closeBtn = fullscreenOverlay.querySelector('.close-fullscreen');
+        const closeIcon = fullscreenOverlay.querySelector('.close-icon');
+        
+        // Multiple event types for better mobile support
+        const closeEvents = ['click', 'touchend'];
+        
+        closeEvents.forEach(eventType => {
+            closeBtn.addEventListener(eventType, function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                fullscreenOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }, { passive: false });
+            
+            closeIcon.addEventListener(eventType, function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                fullscreenOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }, { passive: false });
+        });
+
+        // Close when clicking on overlay background
         fullscreenOverlay.addEventListener('click', function(e) {
             if (e.target === fullscreenOverlay) {
                 fullscreenOverlay.classList.remove('active');
+                document.body.style.overflow = '';
             }
         });
-        
-        // Close button functionality is now handled in the openFullscreen function
+
+        // Close on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && fullscreenOverlay.classList.contains('active')) {
+                fullscreenOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
     }
 
     // Setup image sliders for each service card
@@ -172,86 +378,87 @@ document.addEventListener('DOMContentLoaded', function() {
         const fullscreenBtn = container.querySelector('.toggle-fullscreen');
         let currentIndex = 0;
         
-        // Thêm xử lý sự kiện vuốt (swipe) cho thiết bị di động
+        // Enhanced mobile touch support
         let touchStartX = 0;
         let touchEndX = 0;
+        let isScrolling = false;
         
-        // Xử lý sự kiện chạm bắt đầu
+        // Touch start event
         container.addEventListener('touchstart', function(e) {
             touchStartX = e.changedTouches[0].screenX;
-            // Ngăn chặn hành vi cuộn trang khi đang tương tác với slider
-            e.preventDefault();
-        }, { passive: false });
+            isScrolling = false;
+        }, { passive: true });
         
-        // Xử lý sự kiện chạm kết thúc
+        // Touch move to detect if user is scrolling
+        container.addEventListener('touchmove', function(e) {
+            if (Math.abs(e.changedTouches[0].screenY - e.changedTouches[0].screenY) > 
+                Math.abs(e.changedTouches[0].screenX - touchStartX)) {
+                isScrolling = true;
+            }
+        }, { passive: true });
+        
+        // Touch end event
         container.addEventListener('touchend', function(e) {
-            touchEndX = e.changedTouches[0].screenX;
+            if (isScrolling) return; // Don't handle swipe if user was scrolling
             
-            // Thêm hiệu ứng phản hồi khi vuốt
+            touchEndX = e.changedTouches[0].screenX;
             const difference = touchStartX - touchEndX;
+            
             if (Math.abs(difference) > 50) {
-                container.style.transition = 'transform 0.3s ease';
-                container.style.transform = difference > 0 ? 'translateX(-10px)' : 'translateX(10px)';
+                // Add visual feedback
+                container.style.transition = 'transform 0.2s ease';
+                container.style.transform = difference > 0 ? 'translateX(-5px)' : 'translateX(5px)';
                 
                 setTimeout(() => {
                     container.style.transform = 'translateX(0)';
                     handleSwipe();
-                    
-                    // Xóa hiệu ứng sau khi hoàn thành
                     setTimeout(() => {
                         container.style.transition = '';
-                        container.style.transform = '';
-                    }, 300);
-                }, 150);
-            } else {
-                handleSwipe();
+                    }, 200);
+                }, 100);
             }
-        }, false);
+        }, { passive: true });
         
-        // Xử lý hành động vuốt
         function handleSwipe() {
-            // Vuốt sang phải (previous)
             if (touchEndX > touchStartX + 50) {
+                // Swipe right (previous)
                 let index = currentIndex - 1;
                 if (index < 0) index = images.length - 1;
                 showImage(index);
-            }
-            
-            // Vuốt sang trái (next)
-            if (touchStartX > touchEndX + 50) {
+            } else if (touchStartX > touchEndX + 50) {
+                // Swipe left (next)
                 let index = currentIndex + 1;
                 if (index >= images.length) index = 0;
                 showImage(index);
             }
         }
 
-        // Function to show image at specific index
         function showImage(index) {
-            // Hide all images
             images.forEach(img => img.classList.remove('active'));
-            // Show selected image
             images[index].classList.add('active');
-            // Update indicators
             indicators.forEach(ind => ind.classList.remove('active'));
             indicators[index].classList.add('active');
             currentIndex = index;
         }
 
-        // Previous button click
-        prevBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            let index = currentIndex - 1;
-            if (index < 0) index = images.length - 1;
-            showImage(index);
-        });
+        // Button event listeners
+        if (prevBtn) {
+            prevBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                let index = currentIndex - 1;
+                if (index < 0) index = images.length - 1;
+                showImage(index);
+            });
+        }
 
-        // Next button click
-        nextBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            let index = currentIndex + 1;
-            if (index >= images.length) index = 0;
-            showImage(index);
-        });
+        if (nextBtn) {
+            nextBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                let index = currentIndex + 1;
+                if (index >= images.length) index = 0;
+                showImage(index);
+            });
+        }
 
         // Indicator clicks
         indicators.forEach((indicator, index) => {
@@ -261,26 +468,30 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
 
-        // Fullscreen toggle
-        fullscreenBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            e.preventDefault();
-            openFullscreen();
-        });
-
-        // Add touch event for better mobile support
-        fullscreenBtn.addEventListener('touchend', function(e) {
-            e.stopPropagation();
-            e.preventDefault();
-            openFullscreen();
-        });
-
+        // Enhanced fullscreen functionality
+        if (fullscreenBtn) {
+            fullscreenBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                openFullscreen();
+            });
+            
+            // Also support touch events for mobile
+            fullscreenBtn.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                openFullscreen();
+            });
+        }
+        
         function openFullscreen() {
             const fullscreenOverlay = document.querySelector('.fullscreen-overlay');
             const fullscreenContainer = fullscreenOverlay.querySelector('.fullscreen-container');
             const fullscreenIndicators = fullscreenOverlay.querySelector('.fullscreen-indicators');
             
-            // Clear previous fullscreen images
+            // Prevent body scrolling when fullscreen is open
+            document.body.style.overflow = 'hidden';
+            
+            // Clear previous content
             fullscreenContainer.querySelectorAll('.fullscreen-image').forEach(img => img.remove());
             fullscreenIndicators.innerHTML = '';
             
@@ -298,26 +509,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (index === currentIndex) indicator.classList.add('active');
                 fullscreenIndicators.appendChild(indicator);
                 
-                // Indicator click with improved touch support
-                indicator.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    showFullscreenImage(index);
-                });
-                
-                indicator.addEventListener('touchend', function(e) {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    showFullscreenImage(index);
+                // Indicator events
+                const indicatorEvents = ['click', 'touchend'];
+                indicatorEvents.forEach(eventType => {
+                    indicator.addEventListener(eventType, function(e) {
+                        e.preventDefault();
+                        showFullscreenImage(index);
+                    });
                 });
             });
             
             // Show fullscreen overlay
             fullscreenOverlay.classList.add('active');
             
-            // Prevent body scroll when fullscreen is active
-            document.body.style.overflow = 'hidden';
-            
-            // Setup fullscreen navigation
+            // Setup navigation
             const fullscreenImages = fullscreenContainer.querySelectorAll('.fullscreen-image');
             const fullscreenIndicatorsArray = fullscreenIndicators.querySelectorAll('.fullscreen-indicator');
             let fullscreenCurrentIndex = currentIndex;
@@ -330,163 +535,68 @@ document.addEventListener('DOMContentLoaded', function() {
                 fullscreenCurrentIndex = index;
             }
             
-            // Remove existing event listeners to prevent duplication
-            const prevBtn = fullscreenOverlay.querySelector('.fullscreen-prev');
-            const nextBtn = fullscreenOverlay.querySelector('.fullscreen-next');
+            // Navigation buttons
+            const prevButton = fullscreenOverlay.querySelector('.fullscreen-prev');
+            const nextButton = fullscreenOverlay.querySelector('.fullscreen-next');
             
-            // Clone buttons to remove all event listeners
-            const newPrevBtn = prevBtn.cloneNode(true);
-            const newNextBtn = nextBtn.cloneNode(true);
-            prevBtn.parentNode.replaceChild(newPrevBtn, prevBtn);
-            nextBtn.parentNode.replaceChild(newNextBtn, nextBtn);
+            const navEvents = ['click', 'touchend'];
             
-            // Fullscreen previous button
-            newPrevBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                e.preventDefault();
-                let index = fullscreenCurrentIndex - 1;
-                if (index < 0) index = fullscreenImages.length - 1;
-                showFullscreenImage(index);
+            navEvents.forEach(eventType => {
+                prevButton.addEventListener(eventType, function(e) {
+                    e.preventDefault();
+                    let index = fullscreenCurrentIndex - 1;
+                    if (index < 0) index = fullscreenImages.length - 1;
+                    showFullscreenImage(index);
+                });
+                
+                nextButton.addEventListener(eventType, function(e) {
+                    e.preventDefault();
+                    let index = fullscreenCurrentIndex + 1;
+                    if (index >= fullscreenImages.length) index = 0;
+                    showFullscreenImage(index);
+                });
             });
             
-            newPrevBtn.addEventListener('touchend', function(e) {
-                e.stopPropagation();
-                e.preventDefault();
-                let index = fullscreenCurrentIndex - 1;
-                if (index < 0) index = fullscreenImages.length - 1;
-                showFullscreenImage(index);
-            });
-            
-            // Fullscreen next button
-            newNextBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                e.preventDefault();
-                let index = fullscreenCurrentIndex + 1;
-                if (index >= fullscreenImages.length) index = 0;
-                showFullscreenImage(index);
-            });
-            
-            newNextBtn.addEventListener('touchend', function(e) {
-                e.stopPropagation();
-                e.preventDefault();
-                let index = fullscreenCurrentIndex + 1;
-                if (index >= fullscreenImages.length) index = 0;
-                showFullscreenImage(index);
-            });
-            
-            // Improved touch/swipe handling for fullscreen
-            let touchStartX = 0;
-            let touchEndX = 0;
-            let touchStartY = 0;
-            let touchEndY = 0;
-            let isSwiping = false;
+            // Enhanced touch support for fullscreen container
+            let fullscreenTouchStartX = 0;
+            let fullscreenTouchEndX = 0;
+            let fullscreenIsScrolling = false;
             
             fullscreenContainer.addEventListener('touchstart', function(e) {
-                touchStartX = e.changedTouches[0].screenX;
-                touchStartY = e.changedTouches[0].screenY;
-                isSwiping = false;
+                fullscreenTouchStartX = e.changedTouches[0].screenX;
+                fullscreenIsScrolling = false;
             }, { passive: true });
             
             fullscreenContainer.addEventListener('touchmove', function(e) {
-                const touchCurrentX = e.changedTouches[0].screenX;
-                const touchCurrentY = e.changedTouches[0].screenY;
-                const deltaX = Math.abs(touchCurrentX - touchStartX);
-                const deltaY = Math.abs(touchCurrentY - touchStartY);
-                
-                // If horizontal movement is greater than vertical, it's a swipe
-                if (deltaX > deltaY && deltaX > 30) {
-                    isSwiping = true;
-                    e.preventDefault(); // Prevent scrolling
+                if (Math.abs(e.changedTouches[0].screenY - e.changedTouches[0].screenY) > 
+                    Math.abs(e.changedTouches[0].screenX - fullscreenTouchStartX)) {
+                    fullscreenIsScrolling = true;
                 }
-            }, { passive: false });
+            }, { passive: true });
             
             fullscreenContainer.addEventListener('touchend', function(e) {
-                if (!isSwiping) return;
+                if (fullscreenIsScrolling) return;
                 
-                touchEndX = e.changedTouches[0].screenX;
-                touchEndY = e.changedTouches[0].screenY;
+                fullscreenTouchEndX = e.changedTouches[0].screenX;
+                const difference = fullscreenTouchStartX - fullscreenTouchEndX;
                 
-                const horizontalDiff = touchStartX - touchEndX;
-                const verticalDiff = Math.abs(touchStartY - touchEndY);
-                
-                // Only process horizontal swipes
-                if (Math.abs(horizontalDiff) > verticalDiff && Math.abs(horizontalDiff) > 50) {
-                    if (horizontalDiff > 0) {
-                        // Swipe left - next image
-                        let index = fullscreenCurrentIndex + 1;
-                        if (index >= fullscreenImages.length) index = 0;
-                        showFullscreenImage(index);
-                    } else {
-                        // Swipe right - previous image
+                if (Math.abs(difference) > 50) {
+                    if (fullscreenTouchEndX > fullscreenTouchStartX + 50) {
+                        // Swipe right (previous)
                         let index = fullscreenCurrentIndex - 1;
                         if (index < 0) index = fullscreenImages.length - 1;
+                        showFullscreenImage(index);
+                    } else if (fullscreenTouchStartX > fullscreenTouchEndX + 50) {
+                        // Swipe left (next)
+                        let index = fullscreenCurrentIndex + 1;
+                        if (index >= fullscreenImages.length) index = 0;
                         showFullscreenImage(index);
                     }
                 }
             }, { passive: true });
-            
-            // Keyboard navigation
-            function handleKeyDown(e) {
-                switch(e.key) {
-                    case 'ArrowLeft':
-                        e.preventDefault();
-                        let prevIndex = fullscreenCurrentIndex - 1;
-                        if (prevIndex < 0) prevIndex = fullscreenImages.length - 1;
-                        showFullscreenImage(prevIndex);
-                        break;
-                    case 'ArrowRight':
-                        e.preventDefault();
-                        let nextIndex = fullscreenCurrentIndex + 1;
-                        if (nextIndex >= fullscreenImages.length) nextIndex = 0;
-                        showFullscreenImage(nextIndex);
-                        break;
-                    case 'Escape':
-                        e.preventDefault();
-                        closeFullscreen();
-                        break;
-                }
-            }
-            
-            function closeFullscreen() {
-                fullscreenOverlay.classList.remove('active');
-                document.body.style.overflow = '';
-                document.removeEventListener('keydown', handleKeyDown);
-            }
-            
-            // Add keyboard event listener
-            document.addEventListener('keydown', handleKeyDown);
-            
-            // Update close button functionality
-            const closeBtn = fullscreenOverlay.querySelector('#closeFullscreenBtn');
-            const closeIcon = fullscreenOverlay.querySelector('.close-icon');
-            
-            if (closeBtn) {
-                // Remove existing event listeners
-                const newCloseBtn = closeBtn.cloneNode(true);
-                closeBtn.parentNode.replaceChild(newCloseBtn, closeBtn);
-                
-                newCloseBtn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    closeFullscreen();
-                });
-                
-                newCloseBtn.addEventListener('touchend', function(e) {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    closeFullscreen();
-                });
-            }
-            
-            // Close on overlay click (but not on content)
-            fullscreenOverlay.addEventListener('click', function(e) {
-                if (e.target === fullscreenOverlay) {
-                    closeFullscreen();
-                }
-            });
-        });
+        }
     });
-});
+}
 
 // Counter animation for statistics
 function animateCounter(element, target, duration = 2000) {
@@ -505,81 +615,99 @@ function animateCounter(element, target, duration = 2000) {
 }
 
 // Initialize counters when they come into view
-const counterObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            const target = parseInt(entry.target.getAttribute('data-target'));
-            animateCounter(entry.target, target);
-            counterObserver.unobserve(entry.target);
-        }
-    });
-}, { threshold: 0.5 });
+function initializeCounters() {
+    const counterObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const target = parseInt(entry.target.getAttribute('data-target'));
+                animateCounter(entry.target, target);
+                counterObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
 
-// Observe counter elements
-document.querySelectorAll('[data-target]').forEach(counter => {
-    counterObserver.observe(counter);
-});
+    // Observe counter elements
+    document.querySelectorAll('[data-target]').forEach(counter => {
+        counterObserver.observe(counter);
+    });
+}
 
 // Lazy loading for images
-const images = document.querySelectorAll('img[data-src]');
-const imageObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            const img = entry.target;
-            img.src = img.dataset.src;
-            img.classList.remove('lazy');
-            imageObserver.unobserve(img);
-        }
+function initializeLazyLoading() {
+    const images = document.querySelectorAll('img[data-src]');
+    const imageObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const img = entry.target;
+                img.src = img.dataset.src;
+                img.classList.remove('lazy');
+                imageObserver.unobserve(img);
+            }
+        });
     });
-});
 
-images.forEach(img => imageObserver.observe(img));
+    images.forEach(img => imageObserver.observe(img));
+}
 
 // Parallax effect for hero section
-window.addEventListener('scroll', () => {
-    const scrolled = window.pageYOffset;
-    const hero = document.querySelector('.hero');
-    if (hero) {
-        const rate = scrolled * -0.5;
-        hero.style.transform = `translateY(${rate}px)`;
-    }
-});
-
-// Add loading animation
-window.addEventListener('load', () => {
-    document.body.classList.add('loaded');
-});
-
-// Initialize tooltips (if any)
-const tooltips = document.querySelectorAll('[data-tooltip]');
-tooltips.forEach(tooltip => {
-    tooltip.addEventListener('mouseenter', function() {
-        const tooltipText = this.getAttribute('data-tooltip');
-        const tooltipElement = document.createElement('div');
-        tooltipElement.className = 'tooltip';
-        tooltipElement.textContent = tooltipText;
-        document.body.appendChild(tooltipElement);
-        
-        const rect = this.getBoundingClientRect();
-        tooltipElement.style.left = rect.left + (rect.width / 2) - (tooltipElement.offsetWidth / 2) + 'px';
-        tooltipElement.style.top = rect.top - tooltipElement.offsetHeight - 10 + 'px';
-    });
-    
-    tooltip.addEventListener('mouseleave', function() {
-        const tooltipElement = document.querySelector('.tooltip');
-        if (tooltipElement) {
-            tooltipElement.remove();
+function initializeParallax() {
+    window.addEventListener('scroll', () => {
+        const scrolled = window.pageYOffset;
+        const hero = document.querySelector('.hero');
+        if (hero) {
+            const rate = scrolled * -0.5;
+            hero.style.transform = `translateY(${rate}px)`;
         }
     });
-}); 
+}
+
+// Add loading animation
+function initializeLoadingAnimation() {
+    window.addEventListener('load', () => {
+        document.body.classList.add('loaded');
+    });
+}
+
+// Initialize tooltips (if any)
+function initializeTooltips() {
+    const tooltips = document.querySelectorAll('[data-tooltip]');
+    tooltips.forEach(tooltip => {
+        tooltip.addEventListener('mouseenter', function() {
+            const tooltipText = this.getAttribute('data-tooltip');
+            const tooltipElement = document.createElement('div');
+            tooltipElement.className = 'tooltip';
+            tooltipElement.textContent = tooltipText;
+            document.body.appendChild(tooltipElement);
+            
+            const rect = this.getBoundingClientRect();
+            tooltipElement.style.left = rect.left + (rect.width / 2) - (tooltipElement.offsetWidth / 2) + 'px';
+            tooltipElement.style.top = rect.top - tooltipElement.offsetHeight - 10 + 'px';
+        });
+        
+        tooltip.addEventListener('mouseleave', function() {
+            const tooltipElement = document.querySelector('.tooltip');
+            if (tooltipElement) {
+                tooltipElement.remove();
+            }
+        });
+    }); 
+}
 
 // Toast Notification System
+function initializeToastSystem() {
+    if (!window.toast) {
+        window.toast = new Toast();
+    }
+}
+
 class Toast {
     constructor() {
         this.createToastContainer();
     }
 
     createToastContainer() {
+        if (document.getElementById('toast-container')) return;
+        
         const container = document.createElement('div');
         container.id = 'toast-container';
         container.style.cssText = `
@@ -604,24 +732,29 @@ class Toast {
             </div>
         `;
         
-        document.getElementById('toast-container').appendChild(toast);
-        
-        setTimeout(() => {
-            toast.classList.add('show');
-        }, 100);
+        const container = document.getElementById('toast-container');
+        if (container) {
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 100);
 
-        setTimeout(() => {
-            toast.classList.remove('show');
-            setTimeout(() => toast.remove(), 300);
-        }, duration);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, duration);
+        }
     }
 }
 
-const toast = new Toast();
-
-
-
 // Enhanced Form Handling with EmailJS Integration
+function initializeEmailForms() {
+    if (typeof emailjs === 'undefined') return;
+    
+    const emailFormHandler = new EmailFormHandler();
+}
+
 class EmailFormHandler {
     constructor() {
         this.forms = document.querySelectorAll('form');
@@ -631,8 +764,9 @@ class EmailFormHandler {
 
     initEmailJS() {
         // Initialize EmailJS with your public key
-        // Replace 'YOUR_PUBLIC_KEY' with your actual EmailJS public key
-        emailjs.init('is48xsDmZIpobLamF');
+        if (typeof emailjs !== 'undefined') {
+            emailjs.init('is48xsDmZIpobLamF');
+        }
     }
 
     init() {
@@ -645,17 +779,14 @@ class EmailFormHandler {
         const inputs = form.querySelectorAll('input, textarea, select');
         
         inputs.forEach(input => {
-            // Add floating labels
             if (input.type !== 'submit' && input.type !== 'button') {
                 this.addFloatingLabel(input);
             }
             
-            // Add real-time validation
             input.addEventListener('blur', () => this.validateField(input));
             input.addEventListener('input', () => this.clearFieldError(input));
         });
 
-        // Enhanced form submission with EmailJS
         form.addEventListener('submit', (e) => this.handleEmailSubmit(e, form));
     }
 
@@ -682,10 +813,8 @@ class EmailFormHandler {
         let isValid = true;
         let message = '';
 
-        // Remove existing error
         this.clearFieldError(field);
 
-        // Validation rules
         if (field.hasAttribute('required') && !value) {
             isValid = false;
             message = 'Trường này là bắt buộc';
@@ -739,7 +868,6 @@ class EmailFormHandler {
     async handleEmailSubmit(e, form) {
         e.preventDefault();
         
-        // Validate all fields
         const inputs = form.querySelectorAll('input, textarea, select');
         let isValid = true;
         
@@ -750,28 +878,27 @@ class EmailFormHandler {
         });
 
         if (!isValid) {
-            toast.show('Vui lòng kiểm tra lại thông tin', 'error');
+            if (window.toast) {
+                window.toast.show('Vui lòng kiểm tra lại thông tin', 'error');
+            }
             return;
         }
 
-        // Show loading state
         const submitBtn = form.querySelector('button[type="submit"]');
         const originalText = submitBtn.textContent || submitBtn.innerText;
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang gửi...';
         submitBtn.disabled = true;
 
         try {
-            // Collect form data
             const formData = {
-                from_name: form.querySelector('input[name="name"]').value,
-                from_email: form.querySelector('input[name="email"]').value,
-                phone: form.querySelector('input[name="phone"]').value || 'Không cung cấp',
-                service: form.querySelector('select[name="service"]').value || 'Không chọn',
-                message: form.querySelector('textarea[name="message"]').value,
+                from_name: form.querySelector('input[name="name"]')?.value || '',
+                from_email: form.querySelector('input[name="email"]')?.value || '',
+                phone: form.querySelector('input[name="phone"]')?.value || 'Không cung cấp',
+                service: form.querySelector('select[name="service"]')?.value || 'Không chọn',
+                message: form.querySelector('textarea[name="message"]')?.value || '',
                 date: new Date().toLocaleString('vi-VN')
             };
 
-            // Get service name in Vietnamese
             const serviceNames = {
                 'food': 'Dịch vụ ăn uống',
                 'tour': 'Tour du lịch',
@@ -780,38 +907,46 @@ class EmailFormHandler {
             };
             formData.service_name = serviceNames[formData.service] || 'Không chọn';
 
-            // Send email using EmailJS
-            // Replace 'YOUR_SERVICE_ID' and 'YOUR_TEMPLATE_ID' with your actual EmailJS configuration
-            const response = await emailjs.send(
-                'service_6rqy91s',
-                'template_v8zhd9c',
-                formData
-            );
+            if (typeof emailjs !== 'undefined') {
+                const response = await emailjs.send(
+                    'service_6rqy91s',
+                    'template_v8zhd9c',
+                    formData
+                );
 
-            console.log('Email sent successfully:', response);
-            toast.show('Gửi tin nhắn thành công! Chúng tôi sẽ phản hồi sớm nhất.', 'success', 5000);
+                console.log('Email sent successfully:', response);
+                if (window.toast) {
+                    window.toast.show('Gửi tin nhắn thành công! Chúng tôi sẽ phản hồi sớm nhất.', 'success', 5000);
+                }
+            } else {
+                if (window.toast) {
+                    window.toast.show('Email service not available. Please contact directly.', 'warning', 5000);
+                }
+            }
+            
             form.reset();
             
-            // Reset floating labels
             form.querySelectorAll('.floating-label').forEach(label => {
                 label.classList.remove('active');
             });
             
         } catch (error) {
             console.error('Email sending failed:', error);
-            toast.show('Có lỗi xảy ra khi gửi email. Vui lòng thử lại hoặc liên hệ trực tiếp qua điện thoại.', 'error', 6000);
+            if (window.toast) {
+                window.toast.show('Có lỗi xảy ra khi gửi email. Vui lòng thử lại hoặc liên hệ trực tiếp qua điện thoại.', 'error', 6000);
+            }
         } finally {
-            // Restore button state
             submitBtn.innerHTML = originalText;
             submitBtn.disabled = false;
         }
     }
 }
 
-// Initialize Email Form Handler (replace the old FormHandler)
-const emailFormHandler = new EmailFormHandler();
-
 // Performance Optimizations
+function initializePerformanceOptimizations() {
+    const performanceOptimizer = new PerformanceOptimizer();
+}
+
 class PerformanceOptimizer {
     constructor() {
         this.init();
@@ -857,7 +992,6 @@ class PerformanceOptimizer {
     }
 
     optimizeAnimations() {
-        // Use requestAnimationFrame for smooth animations
         const animatedElements = document.querySelectorAll('.service-card, .value-card, .about-card');
         
         animatedElements.forEach(el => {
@@ -866,140 +1000,21 @@ class PerformanceOptimizer {
     }
 }
 
-// Initialize Performance Optimizer
-const performanceOptimizer = new PerformanceOptimizer();
-
-// Hiển thị thông báo hướng dẫn vuốt cho người dùng thiết bị di động
+// Mobile swipe instructions
 function showSwipeInstructions() {
-    // Kiểm tra xem có phải là thiết bị di động không
     if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
-        // Kiểm tra xem đã hiển thị hướng dẫn trước đó chưa
         if (!localStorage.getItem('swipeInstructionsShown')) {
-            // Tạo thông báo hướng dẫn
             setTimeout(() => {
-                toast.show('Vuốt sang trái/phải để chuyển ảnh', 'info', 5000);
-                // Lưu trạng thái đã hiển thị hướng dẫn
+                if (window.toast) {
+                    window.toast.show('Vuốt sang trái/phải để chuyển ảnh, chạm để phóng to', 'info', 5000);
+                }
                 localStorage.setItem('swipeInstructionsShown', 'true');
             }, 2000);
         }
     }
 }
 
-// Gọi hàm hiển thị hướng dẫn khi trang được tải
-document.addEventListener('DOMContentLoaded', showSwipeInstructions);
-
-// Enhanced Mobile Menu
-class MobileMenu {
-    constructor() {
-        this.menuBtn = document.querySelector('.mobile-menu-btn');
-        this.navMenu = document.querySelector('.nav-menu');
-        this.init();
-    }
-
-    init() {
-        if (this.menuBtn && this.navMenu) {
-            // Remove any existing event listeners first
-            this.menuBtn.removeEventListener('click', this.toggle.bind(this));
-            
-            // Add click event listener to menu button
-            this.menuBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                this.toggle();
-            });
-            
-            // Close menu when clicking on nav links
-            const navLinks = this.navMenu.querySelectorAll('a');
-            navLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    this.close();
-                });
-            });
-            
-            // Close menu when clicking outside
-            document.addEventListener('click', (e) => {
-                if (!this.menuBtn.contains(e.target) && !this.navMenu.contains(e.target)) {
-                    this.close();
-                }
-            });
-
-            // Close menu on escape key
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    this.close();
-                }
-            });
-
-            // Handle touch events for better mobile experience
-            let touchStartY = 0;
-            let touchEndY = 0;
-
-            this.navMenu.addEventListener('touchstart', (e) => {
-                touchStartY = e.changedTouches[0].screenY;
-            }, { passive: true });
-
-            this.navMenu.addEventListener('touchend', (e) => {
-                touchEndY = e.changedTouches[0].screenY;
-                
-                // Close menu if swipe up
-                if (touchStartY - touchEndY > 100) {
-                    this.close();
-                }
-            }, { passive: true });
-        }
-    }
-
-    toggle() {
-        const isActive = this.navMenu.classList.contains('active');
-        
-        if (isActive) {
-            this.close();
-        } else {
-            this.open();
-        }
-    }
-
-    open() {
-        this.navMenu.classList.add('active');
-        this.menuBtn.classList.add('active');
-        
-        // Prevent body scroll when menu is open
-        document.body.style.overflow = 'hidden';
-        
-        // Animate menu items
-        const menuItems = this.navMenu.querySelectorAll('li');
-        menuItems.forEach((item, index) => {
-            item.style.animation = `slideInRight 0.3s ease ${index * 0.1}s both`;
-        });
-        
-        // Set focus to first menu item for accessibility
-        const firstLink = this.navMenu.querySelector('a');
-        if (firstLink) {
-            setTimeout(() => firstLink.focus(), 300);
-        }
-    }
-
-    close() {
-        this.navMenu.classList.remove('active');
-        this.menuBtn.classList.remove('active');
-        
-        // Restore body scroll
-        document.body.style.overflow = '';
-        
-        // Reset animations
-        const menuItems = this.navMenu.querySelectorAll('li');
-        menuItems.forEach(item => {
-            item.style.animation = '';
-        });
-    }
-}
-
-// Initialize Mobile Menu after DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    const mobileMenu = new MobileMenu();
-});
-
-// Add CSS animations
+// Add enhanced CSS animations
 const style = document.createElement('style');
 style.textContent = `
     @keyframes slideInRight {
@@ -1049,5 +1064,133 @@ style.textContent = `
     .fade-in {
         animation: fadeIn 0.5s ease;
     }
+    
+    /* Enhanced mobile menu styles */
+    @media (max-width: 768px) {
+        .nav-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: var(--primary-green);
+            flex-direction: column;
+            padding: 1rem 0;
+            z-index: 1000;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .nav-menu.active {
+            display: flex;
+        }
+
+        .nav-menu li {
+            margin: 0.5rem 0;
+        }
+
+        .nav-menu a {
+            padding: 1rem 2rem;
+            display: block;
+            border-radius: 0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-menu a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding-left: 2.5rem;
+        }
+        
+        /* Enhanced fullscreen styles for mobile */
+        .fullscreen-overlay {
+            padding: 10px;
+        }
+        
+        .close-fullscreen {
+            top: 15px;
+            right: 15px;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            border: 2px solid #333;
+            /* Larger touch target for mobile */
+            min-width: 44px;
+            min-height: 44px;
+        }
+        
+        .close-icon {
+            font-size: 30px;
+            font-weight: bold;
+            line-height: 1;
+        }
+        
+        .fullscreen-container {
+            width: 95%;
+            height: 85%;
+        }
+        
+        .fullscreen-navigation {
+            bottom: 10px;
+        }
+        
+        .fullscreen-prev,
+        .fullscreen-next {
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+            /* Larger touch targets */
+            min-width: 44px;
+            min-height: 44px;
+        }
+        
+        .toggle-fullscreen {
+            width: 40px;
+            height: 40px;
+            font-size: 16px;
+            /* Larger touch target */
+            min-width: 44px;
+            min-height: 44px;
+        }
+    }
+    
+    /* Toast styles */
+    .toast {
+        background: var(--primary-green);
+        color: white;
+        padding: 1rem;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow-lg);
+        opacity: 0;
+        transform: translateX(100%);
+        transition: all 0.3s ease;
+        max-width: 300px;
+    }
+    
+    .toast.show {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    
+    .toast.success {
+        background: #28a745;
+    }
+    
+    .toast.error {
+        background: #dc3545;
+    }
+    
+    .toast.info {
+        background: #17a2b8;
+    }
 `;
 document.head.appendChild(style);
+
+// Debug function for mobile menu
+window.debugMobileMenu = function() {
+    console.log('🔍 Mobile Menu Debug Info:');
+    console.log('Menu Button:', document.querySelector('.mobile-menu-btn'));
+    console.log('Nav Menu:', document.querySelector('.nav-menu'));
+    console.log('Mobile Menu Instance:', window.mobileMenuInstance);
+    console.log('Window width:', window.innerWidth);
+    console.log('Is mobile view:', window.innerWidth <= 768);
+};
