@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hướng Dẫn Ứng Tuyển - Nhiên Việt Go</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+        }
+        
+        .guide-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2d5a27, #4a7c59);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="20" cy="20" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="80" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .content {
+            padding: 3rem;
+        }
+        
+        .step {
+            margin-bottom: 3rem;
+            padding: 2rem;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border: 1px solid #e9ecef;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .step::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(135deg, #2d5a27, #d4af37);
+        }
+        
+        .step-number {
+            background: linear-gradient(135deg, #2d5a27, #4a7c59);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 15px rgba(45, 90, 39, 0.3);
+        }
+        
+        .step h3 {
+            color: #2d5a27;
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+        
+        .step-content {
+            color: #495057;
+            line-height: 1.8;
+        }
+        
+        .step-content ul {
+            margin: 1rem 0;
+            padding-left: 1.5rem;
+        }
+        
+        .step-content li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #ffc107;
+            margin: 1rem 0;
+        }
+        
+        .warning {
+            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #dc3545;
+            margin: 1rem 0;
+        }
+        
+        .success {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #28a745;
+            margin: 1rem 0;
+        }
+        
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+        
+        .button {
+            display: inline-block;
+            background: linear-gradient(135deg, #2d5a27, #4a7c59);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 1rem 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(45, 90, 39, 0.3);
+        }
+        
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(45, 90, 39, 0.4);
+        }
+        
+        .emoji {
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+        }
+        
+        .tech-stack {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .tech-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .tech-item i {
+            font-size: 2rem;
+            color: #2d5a27;
+            margin-bottom: 0.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                padding: 1.5rem;
+            }
+            
+            .step {
+                padding: 1.5rem;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .tech-stack {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="guide-container">
+        <div class="header">
+            <h1><i class="fas fa-briefcase"></i> Hướng Dẫn Ứng Tuyển</h1>
+            <p>Quy trình gửi đơn ứng tuyển với EmailJS tại Nhiên Việt Go</p>
+        </div>
+        
+        <div class="content">
+            <!-- Step 1: Chuẩn bị -->
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3><span class="emoji">📋</span>Chuẩn Bị Hồ Sơ Ứng Tuyển</h3>
+                <div class="step-content">
+                    <p>Trước khi bắt đầu ứng tuyển, hãy chuẩn bị đầy đủ các tài liệu sau:</p>
+                    <ul>
+                        <li><strong>CV/Resume:</strong> File PDF, DOC, hoặc DOCX (tối đa 5MB)</li>
+                        <li><strong>Thông tin cá nhân:</strong> Họ tên, email, số điện thoại</li>
+                        <li><strong>Thư ngỏ:</strong> Giới thiệu bản thân và lý do ứng tuyển</li>
+                        <li><strong>Kinh nghiệm làm việc:</strong> Mô tả chi tiết kinh nghiệm liên quan</li>
+                    </ul>
+                    
+                    <div class="highlight">
+                        <strong><i class="fas fa-lightbulb"></i> Mẹo:</strong> Hãy đặt tên file CV theo format "CV_TenCuaBan_ViTriUngTuyen.pdf" để dễ quản lý.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Truy cập trang ứng tuyển -->
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3><span class="emoji">🌐</span>Truy Cập Form Ứng Tuyển</h3>
+                <div class="step-content">
+                    <p>Có 2 cách để truy cập form ứng tuyển:</p>
+                    <ul>
+                        <li><strong>Cách 1:</strong> Truy cập trực tiếp trang <code>careers.html</code></li>
+                        <li><strong>Cách 2:</strong> Từ trang chủ → Menu "Tuyển dụng" → Cuộn xuống phần "Ứng Tuyển Ngay"</li>
+                    </ul>
+                    
+                    <a href="careers.html" class="button">
+                        <i class="fas fa-external-link-alt"></i> Mở Form Ứng Tuyển
+                    </a>
+                    
+                    <div class="success">
+                        <strong><i class="fas fa-check-circle"></i> Lưu ý:</strong> Form ứng tuyển đã được cải thiện với giao diện chuyên nghiệp và tích hợp EmailJS.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Điền thông tin -->
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3><span class="emoji">✍️</span>Điền Thông Tin Ứng Tuyển</h3>
+                <div class="step-content">
+                    <p>Điền đầy đủ thông tin theo từng bước:</p>
+                    
+                    <h4>3.1. Thông tin cá nhân (Bắt buộc)</h4>
+                    <ul>
+                        <li><strong>Họ và tên:</strong> Nhập đầy đủ họ và tên</li>
+                        <li><strong>Email:</strong> Địa chỉ email hợp lệ (sẽ được dùng để liên hệ)</li>
+                        <li><strong>Số điện thoại:</strong> 10-11 chữ số, không có ký tự đặc biệt</li>
+                        <li><strong>Vị trí ứng tuyển:</strong> Chọn từ dropdown list</li>
+                    </ul>
+                    
+                    <h4>3.2. Kinh nghiệm và CV</h4>
+                    <ul>
+                        <li><strong>Kinh nghiệm làm việc:</strong> Mô tả ngắn gọn (không bắt buộc)</li>
+                        <li><strong>Đính kèm CV:</strong> Chọn file từ máy tính (Bắt buộc)</li>
+                        <li><strong>Thư ngỏ:</strong> Giới thiệu bản thân (không bắt buộc)</li>
+                    </ul>
+                    
+                    <div class="warning">
+                        <strong><i class="fas fa-exclamation-triangle"></i> Chú ý:</strong> 
+                        <ul>
+                            <li>File CV chỉ chấp nhận định dạng PDF, DOC, DOCX</li>
+                            <li>Kích thước file tối đa 5MB</li>
+                            <li>Các trường có dấu (*) là bắt buộc</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4: Kiểm tra và gửi -->
+            <div class="step">
+                <div class="step-number">4</div>
+                <h3><span class="emoji">🚀</span>Kiểm Tra và Gửi Đơn</h3>
+                <div class="step-content">
+                    <p>Trước khi gửi đơn ứng tuyển:</p>
+                    
+                    <h4>4.1. Kiểm tra thông tin</h4>
+                    <ul>
+                        <li>Đảm bảo tất cả thông tin đã được điền chính xác</li>
+                        <li>Kiểm tra email và số điện thoại</li>
+                        <li>Xác nhận file CV đã được đính kèm</li>
+                    </ul>
+                    
+                    <h4>4.2. Gửi đơn ứng tuyển</h4>
+                    <ul>
+                        <li>Click nút <strong>"Gửi đơn ứng tuyển"</strong></li>
+                        <li>Hệ thống sẽ kiểm tra và validate thông tin</li>
+                        <li>Nếu có lỗi, sẽ hiển thị thông báo màu đỏ</li>
+                        <li>Sửa lỗi và thử lại</li>
+                    </ul>
+                    
+                    <div class="highlight">
+                        <strong><i class="fas fa-cog"></i> Quy trình xử lý:</strong><br>
+                        1. Validation form → 2. Gửi email qua EmailJS → 3. Hiển thị thông báo thành công → 4. Tạo mã tham chiếu
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 5: Xác nhận thành công -->
+            <div class="step">
+                <div class="step-number">5</div>
+                <h3><span class="emoji">✅</span>Xác Nhận Thành Công</h3>
+                <div class="step-content">
+                    <p>Sau khi gửi thành công, bạn sẽ nhận được:</p>
+                    
+                    <h4>5.1. Thông báo trên trang web</h4>
+                    <ul>
+                        <li>Popup thông báo xanh: "Đơn ứng tuyển đã được gửi thành công!"</li>
+                        <li>Box thông báo chi tiết với mã tham chiếu</li>
+                        <li>Form sẽ được reset về trạng thái ban đầu</li>
+                    </ul>
+                    
+                    <h4>5.2. Email xác nhận</h4>
+                    <ul>
+                        <li>Email sẽ được gửi đến địa chỉ công ty: dulichnhienviet@gmail.com</li>
+                        <li>Chứa đầy đủ thông tin ứng tuyển của bạn</li>
+                        <li>Có thông tin file CV đã đính kèm</li>
+                    </ul>
+                    
+                    <div class="success">
+                        <strong><i class="fas fa-bookmark"></i> Mã tham chiếu:</strong> 
+                        Format: NV-CAREER-XXXXXX-XXXX<br>
+                        <em>Vui lòng lưu mã này để tra cứu trạng thái đơn ứng tuyển.</em>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Technical Details -->
+            <div class="step">
+                <div class="step-number">⚙️</div>
+                <h3><span class="emoji">🔧</span>Chi Tiết Kỹ Thuật</h3>
+                <div class="step-content">
+                    <h4>Công nghệ sử dụng:</h4>
+                    <div class="tech-stack">
+                        <div class="tech-item">
+                            <i class="fab fa-js-square"></i>
+                            <h5>JavaScript ES6+</h5>
+                            <p>Form validation & handling</p>
+                        </div>
+                        <div class="tech-item">
+                            <i class="fas fa-envelope"></i>
+                            <h5>EmailJS</h5>
+                            <p>Email delivery service</p>
+                        </div>
+                        <div class="tech-item">
+                            <i class="fab fa-css3-alt"></i>
+                            <h5>CSS3</h5>
+                            <p>Modern UI/UX design</p>
+                        </div>
+                        <div class="tech-item">
+                            <i class="fas fa-mobile-alt"></i>
+                            <h5>Responsive</h5>
+                            <p>Mobile-friendly design</p>
+                        </div>
+                    </div>
+                    
+                    <h4>Features đã implement:</h4>
+                    <ul>
+                        <li>✅ Real-time form validation</li>
+                        <li>✅ File upload validation</li>
+                        <li>✅ Professional UI/UX design</li>
+                        <li>✅ EmailJS integration</li>
+                        <li>✅ Toast notifications</li>
+                        <li>✅ Loading states</li>
+                        <li>✅ Error handling</li>
+                        <li>✅ Mobile responsive</li>
+                        <li>✅ Accessibility support</li>
+                        <li>✅ Success confirmation</li>
+                    </ul>
+                    
+                    <div class="code-block">
+// EmailJS Configuration
+Service ID: service_6rqy91s
+Template ID: template_career (cần tạo mới)
+Public Key: is48xsDmZIpobLamF
+                    </div>
+                </div>
+            </div>
+
+            <!-- Troubleshooting -->
+            <div class="step">
+                <div class="step-number">🛠️</div>
+                <h3><span class="emoji">❓</span>Xử Lý Sự Cố</h3>
+                <div class="step-content">
+                    <h4>Các lỗi thường gặp và cách khắc phục:</h4>
+                    
+                    <div class="warning">
+                        <strong>Lỗi: "Email không hợp lệ"</strong><br>
+                        → Kiểm tra định dạng email (phải có @ và domain)
+                    </div>
+                    
+                    <div class="warning">
+                        <strong>Lỗi: "Số điện thoại không hợp lệ"</strong><br>
+                        → Chỉ nhập số, 10-11 chữ số, không có ký tự đặc biệt
+                    </div>
+                    
+                    <div class="warning">
+                        <strong>Lỗi: "File quá lớn"</strong><br>
+                        → Nén file CV xuống dưới 5MB hoặc chuyển sang PDF
+                    </div>
+                    
+                    <div class="warning">
+                        <strong>Lỗi: "EmailJS not available"</strong><br>
+                        → Kiểm tra kết nối internet và thử lại
+                    </div>
+                    
+                    <h4>Debug commands (cho developer):</h4>
+                    <div class="code-block">
+// Kiểm tra form handler
+console.log(window.careerFormHandler);
+
+// Test validation
+document.getElementById('career-form').querySelector('input[name="email"]').value = 'test';
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add some interactive effects
+        document.addEventListener('DOMContentLoaded', function() {
+            const steps = document.querySelectorAll('.step');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.transform = 'translateY(0)';
+                        entry.target.style.opacity = '1';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            steps.forEach((step, index) => {
+                step.style.transform = 'translateY(30px)';
+                step.style.opacity = '0';
+                step.style.transition = `all 0.6s ease ${index * 0.1}s`;
+                observer.observe(step);
+            });
+        });
+    </script>
+</body>
+</html> 

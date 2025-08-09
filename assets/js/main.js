@@ -173,33 +173,33 @@ class UnifiedMobileMenu {
 
 // Smooth scrolling for anchor links
 function initializeSmoothScrolling() {
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }
-        });
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
     });
+});
 }
 
 // Scroll to top button
 function initializeScrollToTop() {
-    const scrollTopBtn = document.querySelector('.scroll-top');
+const scrollTopBtn = document.querySelector('.scroll-top');
     
     if (!scrollTopBtn) return;
 
-    window.addEventListener('scroll', () => {
-        if (window.pageYOffset > 300) {
-            scrollTopBtn.classList.add('visible');
-        } else {
-            scrollTopBtn.classList.remove('visible');
-        }
-    });
+window.addEventListener('scroll', () => {
+    if (window.pageYOffset > 300) {
+        scrollTopBtn.classList.add('visible');
+    } else {
+        scrollTopBtn.classList.remove('visible');
+    }
+});
 
     scrollTopBtn.addEventListener('click', () => {
         const scrollToTop = () => {
@@ -216,18 +216,18 @@ function initializeScrollToTop() {
 
 // Intersection Observer for animations
 function initializeAnimations() {
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
+const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+};
 
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('fade-in-up');
-            }
-        });
-    }, observerOptions);
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('fade-in-up');
+        }
+    });
+}, observerOptions);
 
     const animatedElements = document.querySelectorAll('.about-card, .service-card, .value-card, .contact-item, .benefit-card, .job-card, .testimonial-card');
     animatedElements.forEach(el => {
@@ -237,39 +237,39 @@ function initializeAnimations() {
 
 // Form validation and submission
 function initializeContactForms() {
-    const contactForm = document.querySelector('.contact-form form');
-    if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Basic form validation
+const contactForm = document.querySelector('.contact-form form');
+if (contactForm) {
+    contactForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Basic form validation
             const name = this.querySelector('input[name="name"]')?.value.trim();
             const email = this.querySelector('input[name="email"]')?.value.trim();
             const message = this.querySelector('textarea[name="message"]')?.value.trim();
-            
-            if (!name || !email || !message) {
-                alert('Vui lòng điền đầy đủ thông tin!');
-                return;
-            }
-            
-            if (!isValidEmail(email)) {
-                alert('Vui lòng nhập email hợp lệ!');
-                return;
-            }
-            
-            // Simulate form submission
-            const submitBtn = this.querySelector('button[type="submit"]');
-            const originalText = submitBtn.textContent;
-            submitBtn.textContent = 'Đang gửi...';
-            submitBtn.disabled = true;
-            
-            setTimeout(() => {
-                alert('Cảm ơn bạn đã liên hệ! Chúng tôi sẽ phản hồi sớm nhất có thể.');
-                this.reset();
-                submitBtn.textContent = originalText;
-                submitBtn.disabled = false;
-            }, 2000);
-        });
+        
+        if (!name || !email || !message) {
+            alert('Vui lòng điền đầy đủ thông tin!');
+            return;
+        }
+        
+        if (!isValidEmail(email)) {
+            alert('Vui lòng nhập email hợp lệ!');
+            return;
+        }
+        
+        // Simulate form submission
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Đang gửi...';
+        submitBtn.disabled = true;
+        
+        setTimeout(() => {
+            alert('Cảm ơn bạn đã liên hệ! Chúng tôi sẽ phản hồi sớm nhất có thể.');
+            this.reset();
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+        }, 2000);
+    });
     }
 }
 
@@ -281,30 +281,30 @@ function isValidEmail(email) {
 
 // Header background change on scroll
 function initializeHeaderEffects() {
-    const header = document.querySelector('.header');
+const header = document.querySelector('.header');
     if (!header) return;
     
-    window.addEventListener('scroll', () => {
-        if (window.pageYOffset > 100) {
-            header.style.background = 'rgba(45, 90, 39, 0.95)';
-        } else {
-            header.style.background = 'linear-gradient(135deg, var(--primary-green), var(--secondary-green))';
-        }
-    });
+window.addEventListener('scroll', () => {
+    if (window.pageYOffset > 100) {
+        header.style.background = 'rgba(45, 90, 39, 0.95)';
+    } else {
+        header.style.background = 'linear-gradient(135deg, var(--primary-green), var(--secondary-green))';
+    }
+});
 }
 
 // Service cards hover effect
 function initializeServiceCards() {
-    const serviceCards = document.querySelectorAll('.service-card');
-    serviceCards.forEach(card => {
-        card.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-10px) scale(1.02)';
-        });
-        
-        card.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0) scale(1)';
-        });
+const serviceCards = document.querySelectorAll('.service-card');
+serviceCards.forEach(card => {
+    card.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-10px) scale(1.02)';
     });
+    
+    card.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0) scale(1)';
+    });
+});
 }
 
 // Enhanced Image Gallery with Mobile-Optimized Fullscreen
@@ -336,15 +336,15 @@ function initializeImageGallery() {
         
         closeEvents.forEach(eventType => {
             closeBtn.addEventListener(eventType, function(e) {
-                e.preventDefault();
-                e.stopPropagation();
+                    e.preventDefault();
+                    e.stopPropagation();
                 fullscreenOverlay.classList.remove('active');
                 document.body.style.overflow = '';
             }, { passive: false });
             
             closeIcon.addEventListener(eventType, function(e) {
                 e.preventDefault();
-                e.stopPropagation();
+                    e.stopPropagation();
                 fullscreenOverlay.classList.remove('active');
                 document.body.style.overflow = '';
             }, { passive: false });
@@ -443,21 +443,21 @@ function initializeImageGallery() {
 
         // Button event listeners
         if (prevBtn) {
-            prevBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                let index = currentIndex - 1;
-                if (index < 0) index = images.length - 1;
-                showImage(index);
-            });
+        prevBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            let index = currentIndex - 1;
+            if (index < 0) index = images.length - 1;
+            showImage(index);
+        });
         }
 
         if (nextBtn) {
-            nextBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                let index = currentIndex + 1;
-                if (index >= images.length) index = 0;
-                showImage(index);
-            });
+        nextBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            let index = currentIndex + 1;
+            if (index >= images.length) index = 0;
+            showImage(index);
+        });
         }
 
         // Indicator clicks
@@ -470,8 +470,8 @@ function initializeImageGallery() {
 
         // Enhanced fullscreen functionality
         if (fullscreenBtn) {
-            fullscreenBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
+        fullscreenBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
                 openFullscreen();
             });
             
@@ -514,7 +514,7 @@ function initializeImageGallery() {
                 indicatorEvents.forEach(eventType => {
                     indicator.addEventListener(eventType, function(e) {
                         e.preventDefault();
-                        showFullscreenImage(index);
+                    showFullscreenImage(index);
                     });
                 });
             });
@@ -544,16 +544,16 @@ function initializeImageGallery() {
             navEvents.forEach(eventType => {
                 prevButton.addEventListener(eventType, function(e) {
                     e.preventDefault();
-                    let index = fullscreenCurrentIndex - 1;
-                    if (index < 0) index = fullscreenImages.length - 1;
-                    showFullscreenImage(index);
-                });
-                
+                let index = fullscreenCurrentIndex - 1;
+                if (index < 0) index = fullscreenImages.length - 1;
+                showFullscreenImage(index);
+            });
+            
                 nextButton.addEventListener(eventType, function(e) {
                     e.preventDefault();
-                    let index = fullscreenCurrentIndex + 1;
-                    if (index >= fullscreenImages.length) index = 0;
-                    showFullscreenImage(index);
+                let index = fullscreenCurrentIndex + 1;
+                if (index >= fullscreenImages.length) index = 0;
+                showFullscreenImage(index);
                 });
             });
             
@@ -583,19 +583,19 @@ function initializeImageGallery() {
                 if (Math.abs(difference) > 50) {
                     if (fullscreenTouchEndX > fullscreenTouchStartX + 50) {
                         // Swipe right (previous)
-                        let index = fullscreenCurrentIndex - 1;
-                        if (index < 0) index = fullscreenImages.length - 1;
-                        showFullscreenImage(index);
+                    let index = fullscreenCurrentIndex - 1;
+                    if (index < 0) index = fullscreenImages.length - 1;
+                    showFullscreenImage(index);
                     } else if (fullscreenTouchStartX > fullscreenTouchEndX + 50) {
                         // Swipe left (next)
-                        let index = fullscreenCurrentIndex + 1;
-                        if (index >= fullscreenImages.length) index = 0;
-                        showFullscreenImage(index);
-                    }
+                    let index = fullscreenCurrentIndex + 1;
+                    if (index >= fullscreenImages.length) index = 0;
+                    showFullscreenImage(index);
+                }
                 }
             }, { passive: true });
-        }
-    });
+            }
+        });
 }
 
 // Counter animation for statistics
@@ -616,81 +616,81 @@ function animateCounter(element, target, duration = 2000) {
 
 // Initialize counters when they come into view
 function initializeCounters() {
-    const counterObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const target = parseInt(entry.target.getAttribute('data-target'));
-                animateCounter(entry.target, target);
-                counterObserver.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.5 });
-
-    // Observe counter elements
-    document.querySelectorAll('[data-target]').forEach(counter => {
-        counterObserver.observe(counter);
+const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const target = parseInt(entry.target.getAttribute('data-target'));
+            animateCounter(entry.target, target);
+            counterObserver.unobserve(entry.target);
+        }
     });
+}, { threshold: 0.5 });
+
+// Observe counter elements
+document.querySelectorAll('[data-target]').forEach(counter => {
+    counterObserver.observe(counter);
+});
 }
 
 // Lazy loading for images
 function initializeLazyLoading() {
-    const images = document.querySelectorAll('img[data-src]');
-    const imageObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const img = entry.target;
-                img.src = img.dataset.src;
-                img.classList.remove('lazy');
-                imageObserver.unobserve(img);
-            }
-        });
+const images = document.querySelectorAll('img[data-src]');
+const imageObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const img = entry.target;
+            img.src = img.dataset.src;
+            img.classList.remove('lazy');
+            imageObserver.unobserve(img);
+        }
     });
+});
 
-    images.forEach(img => imageObserver.observe(img));
+images.forEach(img => imageObserver.observe(img));
 }
 
 // Parallax effect for hero section
 function initializeParallax() {
-    window.addEventListener('scroll', () => {
-        const scrolled = window.pageYOffset;
-        const hero = document.querySelector('.hero');
-        if (hero) {
-            const rate = scrolled * -0.5;
-            hero.style.transform = `translateY(${rate}px)`;
-        }
-    });
+window.addEventListener('scroll', () => {
+    const scrolled = window.pageYOffset;
+    const hero = document.querySelector('.hero');
+    if (hero) {
+        const rate = scrolled * -0.5;
+        hero.style.transform = `translateY(${rate}px)`;
+    }
+});
 }
 
 // Add loading animation
 function initializeLoadingAnimation() {
-    window.addEventListener('load', () => {
-        document.body.classList.add('loaded');
-    });
+window.addEventListener('load', () => {
+    document.body.classList.add('loaded');
+});
 }
 
 // Initialize tooltips (if any)
 function initializeTooltips() {
-    const tooltips = document.querySelectorAll('[data-tooltip]');
-    tooltips.forEach(tooltip => {
-        tooltip.addEventListener('mouseenter', function() {
-            const tooltipText = this.getAttribute('data-tooltip');
-            const tooltipElement = document.createElement('div');
-            tooltipElement.className = 'tooltip';
-            tooltipElement.textContent = tooltipText;
-            document.body.appendChild(tooltipElement);
-            
-            const rect = this.getBoundingClientRect();
-            tooltipElement.style.left = rect.left + (rect.width / 2) - (tooltipElement.offsetWidth / 2) + 'px';
-            tooltipElement.style.top = rect.top - tooltipElement.offsetHeight - 10 + 'px';
-        });
+const tooltips = document.querySelectorAll('[data-tooltip]');
+tooltips.forEach(tooltip => {
+    tooltip.addEventListener('mouseenter', function() {
+        const tooltipText = this.getAttribute('data-tooltip');
+        const tooltipElement = document.createElement('div');
+        tooltipElement.className = 'tooltip';
+        tooltipElement.textContent = tooltipText;
+        document.body.appendChild(tooltipElement);
         
-        tooltip.addEventListener('mouseleave', function() {
-            const tooltipElement = document.querySelector('.tooltip');
-            if (tooltipElement) {
-                tooltipElement.remove();
-            }
-        });
-    }); 
+        const rect = this.getBoundingClientRect();
+        tooltipElement.style.left = rect.left + (rect.width / 2) - (tooltipElement.offsetWidth / 2) + 'px';
+        tooltipElement.style.top = rect.top - tooltipElement.offsetHeight - 10 + 'px';
+    });
+    
+    tooltip.addEventListener('mouseleave', function() {
+        const tooltipElement = document.querySelector('.tooltip');
+        if (tooltipElement) {
+            tooltipElement.remove();
+        }
+    });
+}); 
 }
 
 // Toast Notification System
@@ -735,29 +735,35 @@ class Toast {
         const container = document.getElementById('toast-container');
         if (container) {
             container.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.classList.add('show');
-            }, 100);
+        
+        setTimeout(() => {
+            toast.classList.add('show');
+        }, 100);
 
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => toast.remove(), 300);
-            }, duration);
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 300);
+        }, duration);
         }
     }
 }
 
 // Enhanced Form Handling with EmailJS Integration
 function initializeEmailForms() {
-    if (typeof emailjs === 'undefined') return;
-    
     const emailFormHandler = new EmailFormHandler();
+    
+    // Career form will use regular form submission (no EmailJS)
+    const careerForm = document.getElementById('career-form');
+    if (careerForm) {
+        console.log('📋 Career form found - using standard form submission');
+        // Add basic form validation without EmailJS
+        initializeBasicCareerForm();
+    }
 }
 
 class EmailFormHandler {
     constructor() {
-        this.forms = document.querySelectorAll('form');
+        this.forms = document.querySelectorAll('form:not(#career-form)'); // Exclude career form
         this.initEmailJS();
         this.init();
     }
@@ -765,7 +771,7 @@ class EmailFormHandler {
     initEmailJS() {
         // Initialize EmailJS with your public key
         if (typeof emailjs !== 'undefined') {
-            emailjs.init('is48xsDmZIpobLamF');
+        emailjs.init('is48xsDmZIpobLamF');
         }
     }
 
@@ -908,13 +914,13 @@ class EmailFormHandler {
             formData.service_name = serviceNames[formData.service] || 'Không chọn';
 
             if (typeof emailjs !== 'undefined') {
-                const response = await emailjs.send(
-                    'service_6rqy91s',
-                    'template_v8zhd9c',
-                    formData
-                );
+            const response = await emailjs.send(
+                'service_6rqy91s',
+                'template_v8zhd9c',
+                formData
+            );
 
-                console.log('Email sent successfully:', response);
+            console.log('Email sent successfully:', response);
                 if (window.toast) {
                     window.toast.show('Gửi tin nhắn thành công! Chúng tôi sẽ phản hồi sớm nhất.', 'success', 5000);
                 }
@@ -939,6 +945,590 @@ class EmailFormHandler {
             submitBtn.innerHTML = originalText;
             submitBtn.disabled = false;
         }
+    }
+}
+
+// Basic Career Form Handler (No EmailJS)
+function initializeBasicCareerForm() {
+    const form = document.getElementById('career-form');
+    if (!form) return;
+    
+    console.log('🎯 Initializing Basic Career Form...');
+    
+    // Setup file upload display
+    setupBasicFileUpload();
+    
+    // Add form submission prevention (since we're not using EmailJS)
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        if (window.toast) {
+            window.toast.show('📋 Vui lòng sử dụng hướng dẫn ứng tuyển để biết cách gửi đơn!', 'info', 5000);
+        } else {
+            alert('📋 Vui lòng xem hướng dẫn ứng tuyển để biết cách gửi đơn!');
+        }
+        
+        // Open guide in new tab
+        window.open('huong-dan-ung-tuyen.html', '_blank');
+    });
+    
+    console.log('✅ Basic Career Form initialized successfully');
+}
+
+function setupBasicFileUpload() {
+    const fileInput = document.getElementById('resume');
+    const fileNameDisplay = document.querySelector('.file-name');
+    
+    if (!fileInput || !fileNameDisplay) return;
+    
+    fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        
+        if (file) {
+            const fileSize = file.size / 1024 / 1024; // Convert to MB
+            const fileName = file.name;
+            const fileExtension = fileName.split('.').pop().toLowerCase();
+            const allowedExtensions = ['pdf', 'doc', 'docx'];
+            
+            if (!allowedExtensions.includes(fileExtension)) {
+                fileInput.value = '';
+                fileNameDisplay.textContent = 'Chỉ chấp nhận file PDF, DOC, DOCX';
+                fileNameDisplay.style.color = '#e74c3c';
+                fileNameDisplay.classList.remove('has-file');
+                return;
+            }
+            
+            if (fileSize > 5) {
+                fileInput.value = '';
+                fileNameDisplay.textContent = 'Kích thước file không được vượt quá 5MB';
+                fileNameDisplay.style.color = '#e74c3c';
+                fileNameDisplay.classList.remove('has-file');
+                return;
+            }
+            
+            // Valid file
+            fileNameDisplay.textContent = `📄 ${fileName} (${(fileSize).toFixed(2)} MB)`;
+            fileNameDisplay.style.color = '#155724';
+            fileNameDisplay.classList.add('has-file');
+            
+            if (window.toast) {
+                window.toast.show(`✅ File "${fileName}" đã được chọn thành công!`, 'success', 3000);
+            }
+        } else {
+            fileNameDisplay.textContent = 'Chưa có file nào được chọn';
+            fileNameDisplay.style.color = '#6c757d';
+            fileNameDisplay.classList.remove('has-file');
+        }
+    });
+}
+
+// Khởi tạo EmailJS với public key của bạn
+(function() {
+    emailjs.init({
+        publicKey: "is48xsDmZIpobLamF",
+    });
+})();
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Xử lý sự kiện khi file được chọn
+    const resumeInput = document.getElementById('resume');
+    const fileNameDisplay = document.querySelector('.file-name');
+
+    resumeInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+            const fileName = e.target.files[0].name;
+            fileNameDisplay.textContent = fileName;
+        } else {
+            fileNameDisplay.textContent = 'Chưa có file nào được chọn';
+        }
+    });
+
+    // Lắng nghe sự kiện submit của form
+    const form = document.getElementById('career-form');
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // Hiển thị trạng thái đang gửi
+        const submitBtn = form.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang gửi...';
+
+        const file = resumeInput.files[0];
+        let fileData = null;
+        let fileName = null;
+
+        if (file) {
+            fileName = file.name;
+            const reader = new FileReader();
+
+            reader.onloadend = () => {
+                // Mã hóa file thành Base64
+                fileData = reader.result.split(',')[1];
+                sendEmail(fileData, fileName);
+            };
+
+            reader.onerror = (error) => {
+                console.error("Error reading file: ", error);
+                alert("Có lỗi xảy ra khi đọc file. Vui lòng thử lại.");
+                resetFormState();
+            };
+
+            reader.readAsDataURL(file);
+
+        } else {
+            sendEmail(null, null); // Gửi email không có file đính kèm nếu không có file nào được chọn
+        }
+
+        function sendEmail(base64File, attachedFileName) {
+            const templateParams = {
+                user_name: document.getElementById('full-name').value,
+                user_email: document.getElementById('email').value,
+                user_phone: document.getElementById('phone').value,
+                user_position: document.getElementById('position').value,
+                user_experience: document.getElementById('experience').value,
+                user_cover_letter: document.getElementById('cover-letter').value,
+                user_cv: attachedFileName // Gửi tên file để hiển thị trong email
+            };
+            
+            // Thêm file đính kèm vào templateParams
+            if (base64File) {
+                templateParams.cv_attachment = base64File;
+            }
+
+            emailjs.send("service_6rqy91s", "template_2xwdbv6", templateParams)
+                .then(function(response) {
+                    console.log('SUCCESS!', response.status, response.text);
+                    alert("Đơn ứng tuyển của bạn đã được gửi thành công!");
+                    form.reset();
+                    resetFormState();
+                }, function(error) {
+                    console.error('FAILED...', error);
+                    alert("Gửi đơn ứng tuyển thất bại. Vui lòng thử lại sau.");
+                    resetFormState();
+                });
+        }
+        
+        function resetFormState() {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Gửi đơn ứng tuyển';
+            fileNameDisplay.textContent = 'Chưa có file nào được chọn';
+        }
+    });
+
+    // Cập nhật giá trị vị trí ứng tuyển khi nhấn nút "Ứng tuyển ngay"
+    const applyButtons = document.querySelectorAll('.job-card .btn-primary');
+    applyButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            const jobTitle = e.target.closest('.job-card').querySelector('h3').textContent.trim();
+            const positionSelect = document.getElementById('position');
+            for (let i = 0; i < positionSelect.options.length; i++) {
+                if (positionSelect.options[i].textContent.trim() === jobTitle) {
+                    positionSelect.value = positionSelect.options[i].value;
+                    break;
+                }
+            }
+        });
+    });
+});
+
+// Enhanced Career Form Handler with EmailJS
+class CareerFormHandler {
+    constructor() {
+        this.form = document.getElementById('career-form');
+        this.initEmailJS();
+        this.init();
+        this.setupFileUpload();
+    }
+
+    initEmailJS() {
+        // Initialize EmailJS with your public key
+        if (typeof emailjs !== 'undefined') {
+            emailjs.init('is48xsDmZIpobLamF');
+        }
+    }
+
+    init() {
+        if (!this.form) return;
+        
+        console.log('🎯 Initializing Career Form Handler...');
+        
+        this.enhanceForm();
+        this.setupValidation();
+        this.setupSubmission();
+        
+        console.log('✅ Career Form Handler initialized successfully');
+    }
+
+    enhanceForm() {
+        const inputs = this.form.querySelectorAll('input, textarea, select');
+        
+        inputs.forEach(input => {
+            if (input.type !== 'submit' && input.type !== 'button' && input.type !== 'file') {
+                this.addFloatingLabel(input);
+            }
+            
+            // Real-time validation
+            input.addEventListener('blur', () => this.validateField(input));
+            input.addEventListener('input', () => this.clearFieldError(input));
+        });
+    }
+
+    addFloatingLabel(input) {
+        const label = input.previousElementSibling;
+        if (label && label.tagName === 'LABEL') {
+            label.classList.add('floating-label');
+            
+            if (input.value) {
+                label.classList.add('active');
+            }
+            
+            input.addEventListener('focus', () => label.classList.add('active'));
+            input.addEventListener('blur', () => {
+                if (!input.value) {
+                    label.classList.remove('active');
+                }
+            });
+        }
+    }
+
+    setupFileUpload() {
+        const fileInput = document.getElementById('resume');
+        const fileNameDisplay = document.querySelector('.file-name');
+        
+        if (!fileInput || !fileNameDisplay) return;
+        
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            this.clearFieldError(fileInput);
+            
+            if (file) {
+                const fileSize = file.size / 1024 / 1024; // Convert to MB
+                const fileName = file.name;
+                const fileExtension = fileName.split('.').pop().toLowerCase();
+                const allowedExtensions = ['pdf', 'doc', 'docx'];
+                
+                if (!allowedExtensions.includes(fileExtension)) {
+                    this.showFieldError(fileInput, 'Chỉ chấp nhận file PDF, DOC, DOCX');
+                    fileInput.value = '';
+                    fileNameDisplay.textContent = 'Chưa có file nào được chọn';
+                    fileNameDisplay.classList.remove('has-file');
+                    return;
+                }
+                
+                if (fileSize > 5) {
+                    this.showFieldError(fileInput, 'Kích thước file không được vượt quá 5MB');
+                    fileInput.value = '';
+                    fileNameDisplay.textContent = 'Chưa có file nào được chọn';
+                    fileNameDisplay.classList.remove('has-file');
+                    return;
+                }
+                
+                // Valid file
+                fileNameDisplay.textContent = `📄 ${fileName} (${(fileSize).toFixed(2)} MB)`;
+                fileNameDisplay.classList.add('has-file');
+                
+                if (window.toast) {
+                    window.toast.show(`✅ File "${fileName}" đã được chọn thành công!`, 'success', 3000);
+                }
+            } else {
+                fileNameDisplay.textContent = 'Chưa có file nào được chọn';
+                fileNameDisplay.classList.remove('has-file');
+            }
+        });
+    }
+
+    setupValidation() {
+        const inputs = this.form.querySelectorAll('input, textarea, select');
+        
+        inputs.forEach(input => {
+            input.addEventListener('input', () => {
+                if (input.classList.contains('error')) {
+                    this.validateField(input);
+                }
+            });
+        });
+    }
+
+    validateField(field) {
+        const value = field.value.trim();
+        let isValid = true;
+        let message = '';
+
+        this.clearFieldError(field);
+
+        // Required field validation
+        if (field.hasAttribute('required') && !value) {
+            isValid = false;
+            message = 'Trường này là bắt buộc';
+        } 
+        // Email validation
+        else if (field.type === 'email' && value && !this.isValidEmail(value)) {
+            isValid = false;
+            message = 'Email không hợp lệ';
+        } 
+        // Phone validation
+        else if (field.type === 'tel' && value && !this.isValidPhone(value)) {
+            isValid = false;
+            message = 'Số điện thoại không hợp lệ (10-11 số)';
+        }
+        // File validation
+        else if (field.type === 'file' && field.hasAttribute('required') && !field.files.length) {
+            isValid = false;
+            message = 'Vui lòng đính kèm CV';
+        }
+
+        if (!isValid) {
+            this.showFieldError(field, message);
+        }
+
+        return isValid;
+    }
+
+    showFieldError(field, message) {
+        field.classList.add('error');
+        
+        // Remove existing error message
+        const existingError = field.parentNode.querySelector('.error-message');
+        if (existingError) {
+            existingError.remove();
+        }
+        
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'error-message';
+        errorDiv.textContent = message;
+        
+        field.parentNode.appendChild(errorDiv);
+        
+        // Scroll to error if needed
+        setTimeout(() => {
+            field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 100);
+    }
+
+    clearFieldError(field) {
+        field.classList.remove('error');
+        const errorDiv = field.parentNode.querySelector('.error-message');
+        if (errorDiv) {
+            errorDiv.remove();
+        }
+    }
+
+    isValidEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    isValidPhone(phone) {
+        const cleaned = phone.replace(/\s/g, '');
+        return /^[0-9]{10,11}$/.test(cleaned);
+    }
+
+    setupSubmission() {
+        this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+    }
+
+    async handleSubmit(e) {
+        e.preventDefault();
+        
+        console.log('📋 Processing career form submission...');
+        
+        // Validate all fields
+        const inputs = this.form.querySelectorAll('input, textarea, select');
+        let isValid = true;
+        let firstErrorField = null;
+        
+        inputs.forEach(input => {
+            if (!this.validateField(input)) {
+                isValid = false;
+                if (!firstErrorField) {
+                    firstErrorField = input;
+                }
+            }
+        });
+
+        if (!isValid) {
+            if (window.toast) {
+                window.toast.show('❌ Vui lòng kiểm tra lại thông tin đã nhập', 'error', 5000);
+            }
+            
+            if (firstErrorField) {
+                firstErrorField.focus();
+                firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            return;
+        }
+
+        // Show loading state
+        const submitBtn = this.form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang gửi đơn ứng tuyển...';
+        submitBtn.disabled = true;
+
+        try {
+            // Collect form data
+            const formData = this.collectFormData();
+            
+            // Send email using EmailJS (if available)
+            if (typeof emailjs !== 'undefined') {
+                await this.sendEmail(formData);
+            }
+            
+            // Show success message
+            this.showSuccessMessage(formData);
+            
+            // Reset form
+            this.resetForm();
+            
+            console.log('✅ Career form submission completed successfully');
+            
+        } catch (error) {
+            console.error('❌ Career form submission failed:', error);
+            
+            if (window.toast) {
+                window.toast.show('❌ Có lỗi xảy ra khi gửi đơn ứng tuyển. Vui lòng thử lại!', 'error', 6000);
+            }
+        } finally {
+            // Restore button state
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        }
+    }
+
+    collectFormData() {
+        const formData = {
+            fullName: this.form.querySelector('input[name="full-name"]')?.value || '',
+            email: this.form.querySelector('input[name="email"]')?.value || '',
+            phone: this.form.querySelector('input[name="phone"]')?.value || '',
+            position: this.form.querySelector('select[name="position"]')?.value || '',
+            experience: this.form.querySelector('textarea[name="experience"]')?.value || 'Không có thông tin',
+            coverLetter: this.form.querySelector('textarea[name="cover-letter"]')?.value || 'Không có thư ngỏ',
+            submissionDate: new Date().toLocaleString('vi-VN', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            })
+        };
+
+        // Get position name in Vietnamese
+        const positionNames = {
+            'server': 'Phục Vụ',
+            'travel-consultant': 'Tư Vấn Viên Du Lịch',
+            'baker': 'Nhân Viên F&B',
+            'other': 'Vị trí khác'
+        };
+        formData.positionName = positionNames[formData.position] || 'Không xác định';
+
+        // File info
+        const fileInput = this.form.querySelector('input[name="resume"]');
+        if (fileInput && fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            formData.fileName = file.name;
+            formData.fileSize = (file.size / 1024 / 1024).toFixed(2) + ' MB';
+        } else {
+            formData.fileName = 'Không có file đính kèm';
+            formData.fileSize = '';
+        }
+
+        return formData;
+    }
+
+    async sendEmail(formData) {
+        const emailData = {
+            to_email: 'dulichnhienviet@gmail.com', // Company email
+            from_name: formData.fullName,
+            from_email: formData.email,
+            phone: formData.phone,
+            position: formData.positionName,
+            experience: formData.experience,
+            cover_letter: formData.coverLetter,
+            file_name: formData.fileName,
+            file_size: formData.fileSize,
+            submission_date: formData.submissionDate,
+            subject: `Đơn ứng tuyển vị trí ${formData.positionName} - ${formData.fullName}`
+        };
+
+        const response = await emailjs.send(
+            'service_6rqy91s', // Your EmailJS service ID
+            'template_career', // Create a new template for career applications
+            emailData
+        );
+
+        console.log('✅ Career application email sent successfully:', response);
+        
+        if (window.toast) {
+            window.toast.show('✅ Đơn ứng tuyển đã được gửi thành công!', 'success', 6000);
+        }
+
+        return response;
+    }
+
+    showSuccessMessage(formData) {
+        // Remove existing success message
+        const existingMessage = document.querySelector('.success-message');
+        if (existingMessage) {
+            existingMessage.remove();
+        }
+
+        const referenceCode = this.generateReferenceCode();
+        
+        const successMessage = document.createElement('div');
+        successMessage.className = 'success-message';
+        successMessage.innerHTML = `
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>🎉 Đơn ứng tuyển đã được gửi thành công!</h3>
+            <p><strong>Cảm ơn ${formData.fullName} đã ứng tuyển vào vị trí "${formData.positionName}" tại Nhiên Việt Go.</strong></p>
+            <p>Chúng tôi sẽ xem xét hồ sơ của bạn và liên hệ trong thời gian sớm nhất.</p>
+            <p><strong>Mã tham chiếu:</strong> <code>${referenceCode}</code></p>
+            <p><small>Vui lòng lưu mã này để tra cứu trạng thái đơn ứng tuyển.</small></p>
+            <button class="btn btn-primary close-message" onclick="this.parentElement.remove()">
+                <i class="fas fa-times"></i> Đóng
+            </button>
+        `;
+
+        // Insert success message after form
+        this.form.parentNode.insertBefore(successMessage, this.form.nextSibling);
+
+        // Scroll to success message
+        successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        // Auto remove after 15 seconds
+        setTimeout(() => {
+            if (document.body.contains(successMessage)) {
+                successMessage.style.opacity = '0';
+                successMessage.style.transform = 'translateY(-20px)';
+                setTimeout(() => successMessage.remove(), 500);
+            }
+        }, 15000);
+    }
+
+    generateReferenceCode() {
+        const timestamp = new Date().getTime().toString().slice(-6);
+        const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+        return `NV-CAREER-${timestamp}-${random}`;
+    }
+
+    resetForm() {
+        this.form.reset();
+        
+        // Reset file display
+        const fileNameDisplay = document.querySelector('.file-name');
+        if (fileNameDisplay) {
+            fileNameDisplay.textContent = 'Chưa có file nào được chọn';
+            fileNameDisplay.classList.remove('has-file');
+        }
+        
+        // Reset floating labels
+        this.form.querySelectorAll('.floating-label').forEach(label => {
+            label.classList.remove('active');
+        });
+        
+        // Clear all errors
+        this.form.querySelectorAll('.error').forEach(field => {
+            this.clearFieldError(field);
+        });
     }
 }
 
