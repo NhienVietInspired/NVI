@@ -14,18 +14,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Close mobile menu when clicking on a link
-const navLinks = document.querySelectorAll('.nav-menu a');
-navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-        const navMenu = document.querySelector('.nav-menu');
-        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-        if (navMenu && mobileMenuBtn) {
-            navMenu.classList.remove('active');
-            mobileMenuBtn.classList.remove('active');
-        }
-    });
-});
+// Note: Mobile menu closing is now handled by the Enhanced MobileMenu class
 
 // Scroll to top button
 const scrollTopBtn = document.querySelector('.scroll-top');
@@ -169,97 +158,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
-        // Thiết lập sự kiện click trực tiếp cho nút đóng
-        function setupCloseButtonEvents() {
-            // Nút đóng
-            const closeButton = document.getElementById('closeFullscreenBtn');
-            if (closeButton) {
-                // Xóa tất cả sự kiện click cũ (nếu có)
-                const newCloseButton = closeButton.cloneNode(true);
-                closeButton.parentNode.replaceChild(newCloseButton, closeButton);
-                
-                // Thêm sự kiện click mới
-                newCloseButton.onclick = function(e) {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    document.querySelector('.fullscreen-overlay').classList.remove('active');
-                    return false;
-                };
-            }
-            
-            // Biểu tượng X
-            const closeIcon = document.querySelector('.close-icon');
-            if (closeIcon) {
-                // Xóa tất cả sự kiện click cũ (nếu có)
-                const newCloseIcon = closeIcon.cloneNode(true);
-                closeIcon.parentNode.replaceChild(newCloseIcon, closeIcon);
-                
-                // Thêm sự kiện click mới
-                newCloseIcon.onclick = function(e) {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    document.querySelector('.fullscreen-overlay').classList.remove('active');
-                    return false;
-                };
-            }
-        }
-        
-        // Thiết lập sự kiện ngay sau khi tạo overlay
-        setupCloseButtonEvents();
-        
-        // Thêm sự kiện click trực tiếp cho nút đóng
-        document.addEventListener('click', function(e) {
-            const closeButton = e.target.closest('#closeFullscreenBtn');
-            const closeIcon = e.target.closest('.close-icon');
-            
-            if (closeButton || closeIcon) {
-                e.stopPropagation();
-                e.preventDefault();
-                const overlay = document.querySelector('.fullscreen-overlay');
-                if (overlay) {
-                    overlay.classList.remove('active');
-                }
-                return false;
-            }
-        }, true); // Sử dụng capturing phase để đảm bảo sự kiện được xử lý trước
-
-        // Xử lý sự kiện click cho nút đóng và biểu tượng X
-        function setupCloseButtonEvents() {
-            // Nút đóng
-            const closeButton = document.getElementById('closeFullscreenBtn');
-            if (closeButton) {
-                // Xóa tất cả sự kiện click cũ (nếu có)
-                const newCloseButton = closeButton.cloneNode(true);
-                closeButton.parentNode.replaceChild(newCloseButton, closeButton);
-                
-                // Thêm sự kiện click mới
-                newCloseButton.onclick = function(e) {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    document.querySelector('.fullscreen-overlay').classList.remove('active');
-                    return false;
-                };
-            }
-            
-            // Biểu tượng X
-            const closeIcon = document.querySelector('.close-icon');
-            if (closeIcon) {
-                // Xóa tất cả sự kiện click cũ (nếu có)
-                const newCloseIcon = closeIcon.cloneNode(true);
-                closeIcon.parentNode.replaceChild(newCloseIcon, closeIcon);
-                
-                // Thêm sự kiện click mới
-                newCloseIcon.onclick = function(e) {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    document.querySelector('.fullscreen-overlay').classList.remove('active');
-                    return false;
-                };
-            }
-        }
-        
-        // Thiết lập sự kiện ngay sau khi tạo overlay
-        setupCloseButtonEvents();
+        // Close button functionality is now handled in the openFullscreen function
     }
 
     // Setup image sliders for each service card
@@ -365,6 +264,18 @@ document.addEventListener('DOMContentLoaded', function() {
         // Fullscreen toggle
         fullscreenBtn.addEventListener('click', function(e) {
             e.stopPropagation();
+            e.preventDefault();
+            openFullscreen();
+        });
+
+        // Add touch event for better mobile support
+        fullscreenBtn.addEventListener('touchend', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            openFullscreen();
+        });
+
+        function openFullscreen() {
             const fullscreenOverlay = document.querySelector('.fullscreen-overlay');
             const fullscreenContainer = fullscreenOverlay.querySelector('.fullscreen-container');
             const fullscreenIndicators = fullscreenOverlay.querySelector('.fullscreen-indicators');
@@ -387,8 +298,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (index === currentIndex) indicator.classList.add('active');
                 fullscreenIndicators.appendChild(indicator);
                 
-                // Indicator click
-                indicator.addEventListener('click', function() {
+                // Indicator click with improved touch support
+                indicator.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    showFullscreenImage(index);
+                });
+                
+                indicator.addEventListener('touchend', function(e) {
+                    e.stopPropagation();
+                    e.preventDefault();
                     showFullscreenImage(index);
                 });
             });
@@ -396,11 +314,8 @@ document.addEventListener('DOMContentLoaded', function() {
             // Show fullscreen overlay
             fullscreenOverlay.classList.add('active');
             
-            // Đảm bảo sự kiện nút đóng được thiết lập sau khi hiển thị overlay
-            setupCloseButtonEvents();
-            
-            // Đảm bảo sự kiện nút đóng được thiết lập sau khi hiển thị overlay
-            setupCloseButtonEvents();
+            // Prevent body scroll when fullscreen is active
+            document.body.style.overflow = 'hidden';
             
             // Setup fullscreen navigation
             const fullscreenImages = fullscreenContainer.querySelectorAll('.fullscreen-image');
@@ -415,72 +330,160 @@ document.addEventListener('DOMContentLoaded', function() {
                 fullscreenCurrentIndex = index;
             }
             
+            // Remove existing event listeners to prevent duplication
+            const prevBtn = fullscreenOverlay.querySelector('.fullscreen-prev');
+            const nextBtn = fullscreenOverlay.querySelector('.fullscreen-next');
+            
+            // Clone buttons to remove all event listeners
+            const newPrevBtn = prevBtn.cloneNode(true);
+            const newNextBtn = nextBtn.cloneNode(true);
+            prevBtn.parentNode.replaceChild(newPrevBtn, prevBtn);
+            nextBtn.parentNode.replaceChild(newNextBtn, nextBtn);
+            
             // Fullscreen previous button
-            fullscreenOverlay.querySelector('.fullscreen-prev').addEventListener('click', function() {
+            newPrevBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+                let index = fullscreenCurrentIndex - 1;
+                if (index < 0) index = fullscreenImages.length - 1;
+                showFullscreenImage(index);
+            });
+            
+            newPrevBtn.addEventListener('touchend', function(e) {
+                e.stopPropagation();
+                e.preventDefault();
                 let index = fullscreenCurrentIndex - 1;
                 if (index < 0) index = fullscreenImages.length - 1;
                 showFullscreenImage(index);
             });
             
             // Fullscreen next button
-            fullscreenOverlay.querySelector('.fullscreen-next').addEventListener('click', function() {
+            newNextBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                e.preventDefault();
                 let index = fullscreenCurrentIndex + 1;
                 if (index >= fullscreenImages.length) index = 0;
                 showFullscreenImage(index);
             });
             
-            // Thêm xử lý sự kiện vuốt (swipe) cho chế độ xem toàn màn hình trên thiết bị di động
+            newNextBtn.addEventListener('touchend', function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+                let index = fullscreenCurrentIndex + 1;
+                if (index >= fullscreenImages.length) index = 0;
+                showFullscreenImage(index);
+            });
+            
+            // Improved touch/swipe handling for fullscreen
             let touchStartX = 0;
             let touchEndX = 0;
+            let touchStartY = 0;
+            let touchEndY = 0;
+            let isSwiping = false;
             
-            // Xử lý sự kiện chạm bắt đầu
             fullscreenContainer.addEventListener('touchstart', function(e) {
                 touchStartX = e.changedTouches[0].screenX;
-                // Ngăn chặn hành vi cuộn trang khi đang tương tác với slider toàn màn hình
-                e.preventDefault();
+                touchStartY = e.changedTouches[0].screenY;
+                isSwiping = false;
+            }, { passive: true });
+            
+            fullscreenContainer.addEventListener('touchmove', function(e) {
+                const touchCurrentX = e.changedTouches[0].screenX;
+                const touchCurrentY = e.changedTouches[0].screenY;
+                const deltaX = Math.abs(touchCurrentX - touchStartX);
+                const deltaY = Math.abs(touchCurrentY - touchStartY);
+                
+                // If horizontal movement is greater than vertical, it's a swipe
+                if (deltaX > deltaY && deltaX > 30) {
+                    isSwiping = true;
+                    e.preventDefault(); // Prevent scrolling
+                }
             }, { passive: false });
             
-            // Xử lý sự kiện chạm kết thúc
             fullscreenContainer.addEventListener('touchend', function(e) {
+                if (!isSwiping) return;
+                
                 touchEndX = e.changedTouches[0].screenX;
+                touchEndY = e.changedTouches[0].screenY;
                 
-                // Thêm hiệu ứng phản hồi khi vuốt
-                const difference = touchStartX - touchEndX;
-                if (Math.abs(difference) > 50) {
-                    fullscreenContainer.style.transition = 'transform 0.3s ease';
-                    fullscreenContainer.style.transform = difference > 0 ? 'translateX(-20px)' : 'translateX(20px)';
-                    
-                    setTimeout(() => {
-                        fullscreenContainer.style.transform = 'translateX(0)';
-                        handleFullscreenSwipe();
-                        
-                        // Xóa hiệu ứng sau khi hoàn thành
-                        setTimeout(() => {
-                            fullscreenContainer.style.transition = '';
-                            fullscreenContainer.style.transform = '';
-                        }, 300);
-                    }, 150);
-                } else {
-                    handleFullscreenSwipe();
+                const horizontalDiff = touchStartX - touchEndX;
+                const verticalDiff = Math.abs(touchStartY - touchEndY);
+                
+                // Only process horizontal swipes
+                if (Math.abs(horizontalDiff) > verticalDiff && Math.abs(horizontalDiff) > 50) {
+                    if (horizontalDiff > 0) {
+                        // Swipe left - next image
+                        let index = fullscreenCurrentIndex + 1;
+                        if (index >= fullscreenImages.length) index = 0;
+                        showFullscreenImage(index);
+                    } else {
+                        // Swipe right - previous image
+                        let index = fullscreenCurrentIndex - 1;
+                        if (index < 0) index = fullscreenImages.length - 1;
+                        showFullscreenImage(index);
+                    }
                 }
-            }, false);
+            }, { passive: true });
             
-            // Xử lý hành động vuốt trong chế độ toàn màn hình
-            function handleFullscreenSwipe() {
-                // Vuốt sang phải (previous)
-                if (touchEndX > touchStartX + 50) {
-                    let index = fullscreenCurrentIndex - 1;
-                    if (index < 0) index = fullscreenImages.length - 1;
-                    showFullscreenImage(index);
-                }
-                
-                // Vuốt sang trái (next)
-                if (touchStartX > touchEndX + 50) {
-                    let index = fullscreenCurrentIndex + 1;
-                    if (index >= fullscreenImages.length) index = 0;
-                    showFullscreenImage(index);
+            // Keyboard navigation
+            function handleKeyDown(e) {
+                switch(e.key) {
+                    case 'ArrowLeft':
+                        e.preventDefault();
+                        let prevIndex = fullscreenCurrentIndex - 1;
+                        if (prevIndex < 0) prevIndex = fullscreenImages.length - 1;
+                        showFullscreenImage(prevIndex);
+                        break;
+                    case 'ArrowRight':
+                        e.preventDefault();
+                        let nextIndex = fullscreenCurrentIndex + 1;
+                        if (nextIndex >= fullscreenImages.length) nextIndex = 0;
+                        showFullscreenImage(nextIndex);
+                        break;
+                    case 'Escape':
+                        e.preventDefault();
+                        closeFullscreen();
+                        break;
                 }
             }
+            
+            function closeFullscreen() {
+                fullscreenOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+                document.removeEventListener('keydown', handleKeyDown);
+            }
+            
+            // Add keyboard event listener
+            document.addEventListener('keydown', handleKeyDown);
+            
+            // Update close button functionality
+            const closeBtn = fullscreenOverlay.querySelector('#closeFullscreenBtn');
+            const closeIcon = fullscreenOverlay.querySelector('.close-icon');
+            
+            if (closeBtn) {
+                // Remove existing event listeners
+                const newCloseBtn = closeBtn.cloneNode(true);
+                closeBtn.parentNode.replaceChild(newCloseBtn, closeBtn);
+                
+                newCloseBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    closeFullscreen();
+                });
+                
+                newCloseBtn.addEventListener('touchend', function(e) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    closeFullscreen();
+                });
+            }
+            
+            // Close on overlay click (but not on content)
+            fullscreenOverlay.addEventListener('click', function(e) {
+                if (e.target === fullscreenOverlay) {
+                    closeFullscreen();
+                }
+            });
         });
     });
 });
@@ -895,7 +898,23 @@ class MobileMenu {
 
     init() {
         if (this.menuBtn && this.navMenu) {
-            this.menuBtn.addEventListener('click', () => this.toggle());
+            // Remove any existing event listeners first
+            this.menuBtn.removeEventListener('click', this.toggle.bind(this));
+            
+            // Add click event listener to menu button
+            this.menuBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                this.toggle();
+            });
+            
+            // Close menu when clicking on nav links
+            const navLinks = this.navMenu.querySelectorAll('a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    this.close();
+                });
+            });
             
             // Close menu when clicking outside
             document.addEventListener('click', (e) => {
@@ -910,27 +929,68 @@ class MobileMenu {
                     this.close();
                 }
             });
+
+            // Handle touch events for better mobile experience
+            let touchStartY = 0;
+            let touchEndY = 0;
+
+            this.navMenu.addEventListener('touchstart', (e) => {
+                touchStartY = e.changedTouches[0].screenY;
+            }, { passive: true });
+
+            this.navMenu.addEventListener('touchend', (e) => {
+                touchEndY = e.changedTouches[0].screenY;
+                
+                // Close menu if swipe up
+                if (touchStartY - touchEndY > 100) {
+                    this.close();
+                }
+            }, { passive: true });
         }
     }
 
     toggle() {
-        this.navMenu.classList.toggle('active');
-        this.menuBtn.classList.toggle('active');
+        const isActive = this.navMenu.classList.contains('active');
+        
+        if (isActive) {
+            this.close();
+        } else {
+            this.open();
+        }
+    }
+
+    open() {
+        this.navMenu.classList.add('active');
+        this.menuBtn.classList.add('active');
+        
+        // Prevent body scroll when menu is open
+        document.body.style.overflow = 'hidden';
         
         // Animate menu items
         const menuItems = this.navMenu.querySelectorAll('li');
         menuItems.forEach((item, index) => {
-            if (this.navMenu.classList.contains('active')) {
-                item.style.animation = `slideInRight 0.3s ease ${index * 0.1}s both`;
-            } else {
-                item.style.animation = '';
-            }
+            item.style.animation = `slideInRight 0.3s ease ${index * 0.1}s both`;
         });
+        
+        // Set focus to first menu item for accessibility
+        const firstLink = this.navMenu.querySelector('a');
+        if (firstLink) {
+            setTimeout(() => firstLink.focus(), 300);
+        }
     }
 
     close() {
         this.navMenu.classList.remove('active');
         this.menuBtn.classList.remove('active');
+        
+        // Restore body scroll
+        document.body.style.overflow = '';
+        
+        // Reset animations
+        const menuItems = this.navMenu.querySelectorAll('li');
+        menuItems.forEach(item => {
+            item.style.animation = '';
+        });
     }
 }
 

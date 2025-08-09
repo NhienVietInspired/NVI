@@ -1751,24 +1751,79 @@ p {
 @media (max-width: 768px) {
     .nav-menu {
         display: none;
-        position: absolute;
-        top: 100%;
+        position: fixed;
+        top: 80px;
         left: 0;
         width: 100%;
-        background: var(--primary-green);
+        height: calc(100vh - 80px);
+        background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
         flex-direction: column;
-        padding: 1rem 0;
+        padding: 2rem 0;
         z-index: 1000;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         transition: all 0.3s ease;
+        overflow-y: auto;
     }
 
     .nav-menu.active {
         display: flex;
     }
 
+    .nav-menu li {
+        margin: 0.5rem 0;
+        padding: 0 2rem;
+    }
+
+    .nav-menu a {
+        display: block;
+        padding: 1rem 1.5rem;
+        border-radius: 10px;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+
+    .nav-menu a:hover,
+    .nav-menu a:focus {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-color: var(--accent-gold);
+        transform: translateX(10px);
+    }
+
     .mobile-menu-btn {
         display: block;
+        background: none;
+        border: none;
+        color: var(--white);
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 0.5rem;
+        transition: all 0.3s ease;
+        position: relative;
+        z-index: 1001;
+        border-radius: 5px;
+        min-width: 44px;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .mobile-menu-btn:hover,
+    .mobile-menu-btn:focus {
+        color: var(--accent-gold);
+        background-color: rgba(255, 255, 255, 0.1);
+        transform: scale(1.1);
+    }
+
+    .mobile-menu-btn:focus {
+        outline: 2px solid var(--accent-gold);
+        outline-offset: 2px;
+    }
+
+    .mobile-menu-btn.active {
+        color: var(--accent-gold);
+        transform: rotate(90deg);
     }
 
     .hero h1 {
@@ -1812,45 +1867,114 @@ p {
     
     /* Cải thiện trải nghiệm người dùng trên thiết bị di động */
     .prev-image, .next-image, .fullscreen-prev, .fullscreen-next {
-        width: 40px;
-        height: 40px;
+        width: 44px;
+        height: 44px;
+        font-size: 18px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.9);
+        color: var(--primary-green);
+        border: 2px solid var(--primary-green);
+        min-width: 44px;
+        min-height: 44px;
+    }
+    
+    .prev-image:hover, .next-image:hover, 
+    .fullscreen-prev:hover, .fullscreen-next:hover {
+        background-color: var(--primary-green);
+        color: var(--white);
+        transform: scale(1.1);
     }
     
     .toggle-fullscreen {
-        width: 40px;
-        height: 40px;
+        width: 44px;
+        height: 44px;
+        font-size: 18px;
+        background-color: rgba(255, 255, 255, 0.9);
+        color: var(--primary-green);
+        border: 2px solid var(--primary-green);
+        min-width: 44px;
+        min-height: 44px;
+    }
+    
+    .toggle-fullscreen:hover {
+        background-color: var(--primary-green);
+        color: var(--white);
+        transform: scale(1.1);
     }
     
     .close-fullscreen {
-        width: 50px;
-        height: 50px;
+        width: 60px;
+        height: 60px;
+        top: 20px;
+        right: 20px;
+        min-width: 60px;
+        min-height: 60px;
     }
     
     .close-icon {
-        font-size: 36px;
+        font-size: 40px;
     }
     
     /* Tăng kích thước vùng chạm cho các nút điều hướng */
     .image-navigation button, .fullscreen-navigation button {
-        padding: 15px;
-        margin: 0 5px;
-        transition: transform 0.2s ease, opacity 0.2s ease;
+        padding: 10px;
+        margin: 0 8px;
+        transition: transform 0.2s ease, opacity 0.2s ease, background-color 0.2s ease;
     }
     
     .image-navigation button:active, .fullscreen-navigation button:active {
-        transform: scale(0.9);
-        opacity: 0.8;
+        transform: scale(0.95);
+        opacity: 0.9;
     }
     
     .indicator, .fullscreen-indicator {
-        width: 15px;
-        height: 15px;
-        margin: 0 5px;
-        transition: transform 0.2s ease;
+        width: 18px;
+        height: 18px;
+        margin: 0 8px;
+        transition: transform 0.2s ease, background-color 0.2s ease;
+        border: 2px solid rgba(255, 255, 255, 0.8);
+        cursor: pointer;
+        min-width: 18px;
+        min-height: 18px;
     }
     
     .indicator:active, .fullscreen-indicator:active {
         transform: scale(0.9);
+    }
+    
+    .indicator.active, .fullscreen-indicator.active {
+        background-color: var(--accent-gold);
+        border-color: var(--accent-gold);
+    }
+    
+    /* Fullscreen overlay improvements for mobile */
+    .fullscreen-overlay {
+        touch-action: manipulation;
+    }
+    
+    .fullscreen-container {
+        touch-action: pan-x;
+    }
+    
+    .fullscreen-navigation {
+        padding: 20px;
+        background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    }
+    
+    /* Service image container improvements */
+    .service-image-container {
+        touch-action: pan-x;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    /* Better touch feedback */
+    .prev-image:active, .next-image:active,
+    .fullscreen-prev:active, .fullscreen-next:active,
+    .toggle-fullscreen:active,
+    .close-fullscreen:active {
+        transform: scale(0.9);
+        transition: transform 0.1s ease;
     }
 }
 
