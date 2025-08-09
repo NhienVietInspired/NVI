@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="100" fill="#f0f0f0"/>
+  
+  <!-- Head -->
+  <circle cx="100" cy="85" r="40" fill="#e0e0e0"/>
+  
+  <!-- Body -->
+  <path d="M100,125 Q60,125 50,180 L150,180 Q140,125 100,125" fill="#e0e0e0"/>
+  
+  <!-- Face features (simplified) -->
+  <circle cx="85" cy="75" r="5" fill="#555"/>
+  <circle cx="115" cy="75" r="5" fill="#555"/>
+  <path d="M85,100 Q100,110 115,100" stroke="#555" stroke-width="2" fill="none"/>
+  
+  <!-- Hair (female style) -->
+  <path d="M60,85 Q60,35 100,35 Q140,35 140,85 Q140,45 100,45 Q60,45 60,85" fill="#555"/>
+</svg>

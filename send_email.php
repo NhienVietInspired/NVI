@@ -69,7 +69,7 @@ $email_content = "
 <body>
     <div class='container'>
         <div class='header'>
-            <h2>🌟 Tin nhắn mới từ website Nhiên Việt Inspired</h2>
+            <h2>🌟 Tin nhắn mới từ website Nhiên Việt Go</h2>
         </div>
         <div class='content'>
             <div class='field'>
@@ -110,7 +110,7 @@ $email_content = "
 $headers = [
     'MIME-Version' => '1.0',
     'Content-type' => 'text/html; charset=UTF-8',
-    'From' => "Website Nhiên Việt Inspired <noreply@nhienvietnspired.com>",
+    'From' => "Website Nhiên Việt Go <noreply@nhienvietnspired.com>",
     'Reply-To' => $email,
     'X-Mailer' => 'PHP/' . phpversion()
 ];
